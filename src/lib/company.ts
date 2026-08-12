@@ -24,19 +24,35 @@ export const company = {
  */
 export const newsletterEndpoint = "";
 
+export type Office = {
+  /** City or region as it should read on the page. */
+  city: string;
+  country: string;
+  /** Headquarters, Engineering, Support, Sales — short label. */
+  role: string;
+  /** What actually happens at this location. */
+  detail: string;
+  /** Short zone label plus UTC offset, e.g. "CT · UTC−6". */
+  timezone: string;
+  /** Optional street address. Omit unless it is a real, staffed office. */
+  address?: string;
+};
+
 /**
  * Offices. Only real, staffed locations belong here — a fabricated
  * address on a vendor site is the kind of thing a procurement reviewer
- * verifies and a CISO holds against you.
+ * checks and a CISO holds against you. Add entries as they open.
  */
-export const offices = [
+export const offices: Office[] = [
   {
     city: "Texas",
     country: "United States",
     role: "Headquarters",
-    detail: "Product, engineering, and support",
+    detail:
+      "Product, engineering, and customer support. Licence issuing and security response run from here.",
+    timezone: "CT · UTC−6",
   },
-] as const;
+];
 
 /**
  * Social profiles. Only entries with a URL render — an empty string omits
