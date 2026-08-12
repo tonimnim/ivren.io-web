@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
-import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -99,9 +99,17 @@ export default function BrandPage() {
           of existing interface engines and running entirely on the
           hospital&rsquo;s own machine.
         </p>
-        <div className="mt-6">
-          <Placeholder>PRESS_PHOTO</Placeholder>
-        </div>
+        <p className="mt-6 max-w-2xl text-sm leading-relaxed text-ink-secondary">
+          Press and analyst enquiries, including requests for additional
+          assets or an interview:{" "}
+          <a
+            href={`mailto:${company.email}`}
+            className="text-accent hover:text-accent-strong"
+          >
+            {company.email}
+          </a>
+          .
+        </p>
       </Section>
     </>
   );

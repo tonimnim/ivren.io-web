@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
-import { Placeholder } from "@/components/placeholder";
 import { company } from "@/lib/company";
 import { pageMetadata } from "@/lib/seo";
 
@@ -23,7 +22,28 @@ export default function CompanyPage() {
 
       <Section>
         <div className="max-w-2xl space-y-5 text-base leading-relaxed text-ink-secondary">
-          <Placeholder as="div">COMPANY_BLURB</Placeholder>
+          <p>
+            Every hospital runs on interfaces. Orders, admissions, results,
+            and charges move between clinical systems as HL7, FHIR, DICOM,
+            X12, and NCPDP messages, around the clock, largely unwatched.
+            The teams responsible for them are small, and the tooling they
+            inherited was built to move messages — not to explain them.
+          </p>
+          <p>
+            Ivren exists because that gap is where the expensive failures
+            live. A field changes and three systems downstream break. A feed
+            goes quiet and nobody notices until someone asks where their
+            results went. A migration gets deferred for years because no
+            one can prove it is safe.
+          </p>
+          <p>
+            So we built the tool we wanted: it reads the configuration your
+            engine already has, shows you the estate as it actually is,
+            proves a change is safe before it ships, and runs entirely on
+            your own machine — no account, no upload, no telemetry. That
+            last constraint is not a feature we added. It is the premise we
+            started from.
+          </p>
           <p className="border-t border-hairline pt-6 font-mono text-sm text-ink">
             &ldquo;We do not claim what we cannot prove. If you catch this
             site saying something the product can&rsquo;t do, we want to

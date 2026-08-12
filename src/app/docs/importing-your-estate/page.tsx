@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Placeholder } from "@/components/placeholder";
 
 export const metadata: Metadata = { title: "Importing your estate" };
 
@@ -16,12 +15,14 @@ export default function ImportingPage() {
       <h2 id="supported-engines">Supported engines</h2>
       <p>
         Ivren imports configuration exports from supported interface
-        engines. The console lists exactly which engines and export formats
-        the build you are running can read, and additional engines are being
-        added.
+        engines. Rather than list them here, where the page would drift out
+        of date, the console names every engine and export format the build
+        you are running can read — open it and the import screen tells you
+        exactly what it accepts.
       </p>
       <p>
-        Currently supported: <Placeholder>SUPPORTED_ENGINES</Placeholder>
+        If your engine is not listed in your build, send us a sample export
+        and we will tell you plainly whether Ivren can read it.
       </p>
 
       <h2 id="exporting">Exporting from your engine</h2>
