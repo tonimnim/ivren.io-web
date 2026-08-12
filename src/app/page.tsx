@@ -1,69 +1,274 @@
-import Image from "next/image";
+import { Section, Eyebrow, Container } from "@/components/container";
+import { Button } from "@/components/button";
+import { HeroOpsPanel } from "@/components/hero-ops-panel";
+import { TerminalPanel } from "@/components/terminal-panel";
+import { WindowChrome } from "@/components/window-chrome";
+import { Reveal } from "@/components/reveal";
+import { featureGroups } from "@/lib/features";
+
+const PROBLEMS = [
+  {
+    title: "The estate is undocumented.",
+    body: "Dozens to hundreds of feeds carry orders, admissions, results, and charges between systems. The diagram, if one exists, is out of date, and the person who built half of it has left.",
+  },
+  {
+    title: "Changes ship on hope.",
+    body: "There is usually no way to know what a field change breaks three systems downstream until something breaks three systems downstream.",
+  },
+  {
+    title: "Silence looks like success.",
+    body: "When a feed stops, nothing alarms. The queue is empty, the dashboard is green, and the first signal is a phone call from someone who noticed missing results.",
+  },
+];
+
+const STANCES = [
+  {
+    title: "It reads the configuration you already have.",
+    body: "Ivren imports the configuration exports of supported interface engines and turns them into a live map of the estate: what talks to what, which fields carry patient identifiers, and what breaks downstream if something changes.",
+  },
+  {
+    title: "Interfaces become provable artifacts.",
+    body: "Ivren treats interface changes the way modern software treats code: versioned, tested against recorded traffic, and passed through a deployment gate that answers PASS, FAIL, or INDETERMINATE — where missing evidence can never become PASS.",
+  },
+  {
+    title: "It runs entirely on your own machine.",
+    body: "One installer, no cloud requirement, no account, and it works air-gapped. Nothing the product reads leaves the machine. Optional AI features sit behind a strict privacy boundary and are off unless configured.",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <>
+      {/* Hero — full-bleed deep-blue field, light type */}
+      <section className="bg-hero-deep relative isolate -mt-14 overflow-hidden pt-14 sm:-mt-16 sm:pt-16">
+        <div aria-hidden className="bg-grid-dark absolute inset-0 -z-10" />
+
+        <Container className="pt-14 pb-14 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-20">
+          <div className="mx-auto max-w-[840px] text-center">
+            <p className="kicker kicker-dark flex items-center justify-center gap-3">
+              <span
+                aria-hidden
+                className="inline-block h-px w-6 bg-white/30 sm:w-8"
+              />
+              Healthcare integration · Interface assurance
+              <span
+                aria-hidden
+                className="inline-block h-px w-6 bg-white/30 sm:w-8"
+              />
+            </p>
+
+            <h1 className="mt-6 text-[clamp(2.5rem,6.5vw,4.5rem)] leading-[1.02] font-medium tracking-[-0.028em] text-balance text-white">
+              Your hospital&rsquo;s interfaces, mapped, proven,{" "}
+              <span className="font-normal text-white/50">and watched.</span>
+            </h1>
+
+            <p className="mx-auto mt-6 max-w-[46ch] text-base leading-[1.65] text-pretty text-white/75 sm:text-lg">
+              Ivren reads the configuration your interface engine already
+              has, shows you what talks to what, and proves changes are safe
+              before they reach production.
+            </p>
+
+            <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
+              <Button
+                href="/download"
+                variant="onDark"
+                className="w-full sm:w-auto"
+              >
+                Download Ivren
+              </Button>
+              <Button
+                href="/docs"
+                variant="onDarkSecondary"
+                className="w-full sm:w-auto"
+              >
+                Explore the docs
+              </Button>
+            </div>
+          </div>
+
+          <div className="relative mx-auto mt-14 max-w-5xl sm:mt-16">
+            {/* horizon light rising behind the console */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-4 -top-20 h-40 bg-[radial-gradient(52%_100%_at_50%_100%,rgb(124_196_245/0.3),rgb(124_196_245/0.1)_60%,rgb(124_196_245/0)_100%)] blur-md"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <Reveal>
+              <HeroOpsPanel />
+            </Reveal>
+
+            <div className="kicker mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 font-tabular">
+              <span className="text-white/60">
+                HL7 v2 · FHIR R4 · DICOM · X12 · NCPDP
+              </span>
+              <span className="text-white/40">
+                Runs offline · No account · No telemetry
+              </span>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* The problem */}
+      <Section hairline={false} className="bg-surface">
+        <Reveal>
+          <Eyebrow>The problem</Eyebrow>
+          <h2 className="max-w-3xl text-[clamp(1.75rem,2.8vw,2.5rem)] font-semibold leading-tight tracking-[-0.02em] text-ink">
+            The interface layer runs the hospital, and almost nobody can
+            see it.
+          </h2>
+        </Reveal>
+        <div className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {PROBLEMS.map((p) => (
+            <Reveal key={p.title}>
+              <h3 className="text-lg font-medium leading-snug text-ink">
+                {p.title}
+              </h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-ink-secondary">
+                {p.body}
+              </p>
+            </Reveal>
+          ))}
         </div>
-      </main>
-    </div>
+      </Section>
+
+      {/* What Ivren is */}
+      <Section>
+        <Reveal>
+          <Eyebrow>What Ivren is</Eyebrow>
+        </Reveal>
+        <div className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {STANCES.map((s, i) => (
+            <Reveal key={s.title}>
+              <p className="font-mono text-sm text-accent">
+                {String(i + 1).padStart(2, "0")}
+              </p>
+              <h3 className="mt-3 text-lg font-medium leading-snug text-ink">
+                {s.title}
+              </h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-ink-secondary">
+                {s.body}
+              </p>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* Deployment gate */}
+      <Section>
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <Reveal>
+            <Eyebrow>Prove it before it ships</Eyebrow>
+            <h2 className="text-[clamp(1.75rem,2.8vw,2.5rem)] font-semibold leading-tight tracking-[-0.02em] text-ink">
+              A deployment gate a pipeline can trust.
+            </h2>
+            <p className="mt-4 max-w-lg text-base leading-relaxed text-ink-secondary">
+              Exit codes with no ambiguity: 0 PASS · 1 FAIL · 3
+              INDETERMINATE · 4 REFUSED. An answer your CI doesn&rsquo;t
+              understand is an answer it refuses to deploy — and missing
+              evidence can never become PASS.
+            </p>
+            <div className="mt-6">
+              <Button href="/docs/cli-reference" variant="ghost">
+                Read the CLI reference →
+              </Button>
+            </div>
+          </Reveal>
+          <Reveal>
+            <TerminalPanel />
+          </Reveal>
+        </div>
+      </Section>
+
+      {/* Sample data */}
+      <Section>
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <Reveal className="order-2 lg:order-1">
+            <WindowChrome title="ivren — explore with sample data" />
+          </Reveal>
+          <Reveal className="order-1 lg:order-2">
+            <Eyebrow>See it without a file</Eyebrow>
+            <h2 className="text-[clamp(1.75rem,2.8vw,2.5rem)] font-semibold leading-tight tracking-[-0.02em] text-ink">
+              Explore with sample data.
+            </h2>
+            <p className="mt-4 max-w-lg text-base leading-relaxed text-ink-secondary">
+              Every install ships with bundled synthetic interfaces. One
+              click loads the full console — overview, interfaces, live
+              status, health — with no file of your own required. The
+              product is the demo; there is nothing to book.
+            </p>
+            <p className="mt-4 text-sm text-ink-label">
+              Screenshots on this site are of the real product, taken
+              against labeled synthetic data.
+            </p>
+          </Reveal>
+        </div>
+      </Section>
+
+      {/* Platform */}
+      <Section className="bg-surface">
+        <Reveal>
+          <Eyebrow>The platform</Eyebrow>
+          <h2 className="text-[clamp(1.75rem,2.8vw,2.5rem)] font-semibold leading-tight tracking-[-0.02em] text-ink">
+            Map. Prove. Run. Migrate.
+          </h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-secondary">
+            One platform for the whole lifecycle of a hospital interface —
+            from the first import of your estate to the day you cut a route
+            over.
+          </p>
+        </Reveal>
+
+        <div className="mt-10 grid gap-px overflow-hidden rounded-xl border border-hairline bg-hairline sm:grid-cols-2 lg:grid-cols-3">
+          {featureGroups.map((group) => (
+            <div
+              key={group.key}
+              className="group min-w-0 bg-canvas p-6 transition-colors duration-200 ease-out hover:bg-surface-2"
+            >
+              <h3 className="text-base font-medium text-ink transition-colors duration-200 group-hover:text-accent">
+                {group.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+                {group.summary}
+              </p>
+              <ul className="mt-4 space-y-2">
+                {group.items.slice(0, 3).map((item) => (
+                  <li
+                    key={item.name}
+                    className="border-t border-hairline-soft pt-2 text-sm text-ink-secondary"
+                  >
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8">
+          <Button href="/product" variant="secondary">
+            See the full platform
+          </Button>
+        </div>
+      </Section>
+
+      {/* CTA */}
+      <Section>
+        <Reveal className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-[clamp(1.75rem,2.8vw,2.5rem)] font-semibold leading-tight tracking-[-0.02em] text-ink">
+              Download Ivren.
+            </h2>
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-secondary">
+              One ~15 MB executable for Windows. No account. No internet
+              required. Evaluate on the Trial tier, or explore with sample
+              data first.
+            </p>
+          </div>
+          <Button href="/download" className="shrink-0">
+            Download Ivren
+          </Button>
+        </Reveal>
+      </Section>
+    </>
   );
 }

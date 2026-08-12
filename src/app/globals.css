@@ -1,26 +1,435 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /*
+   * Canvas carries a 1% cool tint rather than pure #fff: low-alpha blue
+   * blooms go grey against pure white, and hairlines have nothing to sit
+   * against. Pure white is reserved for elevated surfaces.
+   */
+  --color-canvas: #fbfcfe;
+  --color-paper: #ffffff;
+  --color-surface: #f4f6f9;
+  --color-surface-2: #edf0f4;
+
+  /* Structure */
+  --color-hairline: #e2e5ea;
+  --color-hairline-soft: #edeff2;
+
+  /* Ink */
+  --color-ink: #14181d;
+  --color-ink-secondary: #4a525b;
+  --color-ink-label: #6f7883;
+
+  /* Brand accent (from the Ivren mark) */
+  --color-accent: #0d63b3;
+  --color-accent-strong: #0a4f8f;
+  --color-accent-soft: #e8f1fa;
+
+  /* Status */
+  --color-ok: #1a6f45;
+  --color-ok-soft: #e5f3ea;
+  --color-warn: #6f4e00;
+  --color-warn-soft: #faf1dc;
+  --color-flag: #9d3419;
+  --color-flag-soft: #fbe9e4;
+
+  /* Terminal / code */
+  --color-terminal-bg: #14181d;
+  --color-terminal-ink: #e8eaed;
+
+  --spacing-page: 1.5rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-canvas: var(--color-canvas);
+  --color-paper: var(--color-paper);
+  --color-surface: var(--color-surface);
+  --color-surface-2: var(--color-surface-2);
+  --color-hairline: var(--color-hairline);
+  --color-hairline-soft: var(--color-hairline-soft);
+  --color-ink: var(--color-ink);
+  --color-ink-secondary: var(--color-ink-secondary);
+  --color-ink-label: var(--color-ink-label);
+  --color-accent: var(--color-accent);
+  --color-accent-strong: var(--color-accent-strong);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-ok: var(--color-ok);
+  --color-ok-soft: var(--color-ok-soft);
+  --color-warn: var(--color-warn);
+  --color-warn-soft: var(--color-warn-soft);
+  --color-flag: var(--color-flag);
+  --color-flag-soft: var(--color-flag-soft);
+  --color-terminal-bg: var(--color-terminal-bg);
+  --color-terminal-ink: var(--color-terminal-ink);
+
+  /* One utilitarian sans family site-wide; mono for technical strings. */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+
+  --animate-fade-up: fade-up 0.6s ease-out forwards;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+@keyframes node-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Ops-panel animations. Edges use the pathLength=1 normalization trick. */
+@keyframes edge-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes packet-run {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+/* Packets only exist where offset-path is supported; otherwise hidden. */
+.packet {
+  display: none;
+}
+
+@supports (offset-path: path("M0 0 L1 1")) {
+  .packet {
+    display: block;
+    animation: packet-run 3.8s linear infinite;
+  }
+}
+
+* {
+  border-color: var(--color-hairline);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 1;
+}
+
+/*
+ * Display weight stays at 500–600, never 700. Current references in this
+ * category sit at 300–500; heavy hero type is the clearest dated tell.
+ */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sans);
+  letter-spacing: -0.022em;
+  font-weight: 550;
+}
+
+/* Monospace kicker — an engineering signal where a pill badge would read as marketing. */
+.kicker {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.17em;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-ink-label);
+}
+
+/* Kicker color override for dark surfaces — declared after .kicker so the
+ * unlayered cascade resolves in its favor. */
+.kicker-dark {
+  color: rgb(255 255 255 / 0.6);
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+.font-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Faint blueprint grid. Masked so it never touches a section edge —
+ * that mask is what separates this from a graph-paper background.
+ */
+.bg-grid {
+  background-image:
+    linear-gradient(90deg, rgba(20, 24, 29, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(20, 24, 29, 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(
+    115% 85% at 50% 0%,
+    #000 28%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(115% 85% at 50% 0%, #000 28%, transparent 72%);
+}
+
+@media (max-width: 640px) {
+  .bg-grid {
+    background-size: 48px 48px;
+  }
+}
+
+/*
+ * Brand bloom. Multi-stop with an ease-out ramp — a two-stop radial
+ * falls off linearly and the eye reads that as a visible ring edge.
+ * Every stop terminates on the brand hue at zero alpha rather than the
+ * `transparent` keyword, which resolves to transparent black and casts
+ * grey over large fills. Centers sit off-canvas so this reads as
+ * atmosphere rather than a light source.
+ */
+/*
+ * The home hero: a full-bleed, center-lit field of the brand blue —
+ * light type sits on top. One hue, several tints; the "light source"
+ * sits behind the content, vignetting toward the edges.
+ */
+.bg-hero-deep {
+  background-color: #071b2e;
+  background-image:
+    /* center light source */
+    radial-gradient(
+        62% 56% at 50% 36%,
+        rgb(64 148 220 / 0.5) 0%,
+        rgb(38 116 190 / 0.3) 35%,
+        rgb(20 90 160 / 0.12) 60%,
+        rgb(20 90 160 / 0) 80%
+      ),
+    /* upper-left light tint */
+    radial-gradient(
+        45% 40% at 16% 10%,
+        rgb(124 196 245 / 0.16) 0%,
+        rgb(124 196 245 / 0) 70%
+      ),
+    /* upper-right depth */
+    radial-gradient(
+        50% 45% at 86% 16%,
+        rgb(13 99 179 / 0.38) 0%,
+        rgb(13 99 179 / 0) 72%
+      ),
+    linear-gradient(180deg, #082036 0%, #071b2e 55%, #061627 100%);
+}
+
+/*
+ * Footer field — same family as the hero, lit from the top (the page
+ * above is the light source), settling to near-black at the bottom.
+ */
+.bg-footer-deep {
+  background-color: #061627;
+  background-image:
+    radial-gradient(
+        70% 55% at 50% 0%,
+        rgb(38 116 190 / 0.28) 0%,
+        rgb(20 90 160 / 0.12) 40%,
+        rgb(20 90 160 / 0) 72%
+      ),
+    linear-gradient(180deg, #082036 0%, #061627 45%, #040d18 100%);
+}
+
+/* Blueprint grid for the deep hero — white lines, same edge mask. */
+.bg-grid-dark {
+  background-image:
+    linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(
+    115% 85% at 50% 0%,
+    #000 28%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(115% 85% at 50% 0%, #000 28%, transparent 72%);
+}
+
+@media (max-width: 640px) {
+  .bg-grid-dark {
+    background-size: 48px 48px;
+  }
+}
+
+/* Lighter bloom for interior page headers. */
+.bg-bloom-soft {
+  background: radial-gradient(
+    52% 58% at 84% 0%,
+    rgb(13 99 179 / 0.11) 0%,
+    rgb(13 99 179 / 0.06) 32%,
+    rgb(13 99 179 / 0.022) 58%,
+    rgb(13 99 179 / 0) 84%
+  );
+}
+
+.prose-docs h1 {
+  font-size: 2rem;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+
+.prose-docs > p:first-of-type {
+  font-size: 1.125rem;
+  color: var(--color-ink-secondary);
+  margin-bottom: 2.5rem;
+}
+
+.prose-docs h2 {
+  font-size: 1.375rem;
+  scroll-margin-top: 6rem;
+  padding-top: 2.5rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--color-hairline-soft);
+}
+
+.prose-docs h2:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.prose-docs h3 {
+  font-size: 1.05rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-docs p {
+  margin-top: 1rem;
+  line-height: 1.75;
+  color: var(--color-ink-secondary);
+}
+
+.prose-docs ul,
+.prose-docs ol {
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+  color: var(--color-ink-secondary);
+}
+
+.prose-docs li {
+  margin-top: 0.5rem;
+  line-height: 1.7;
+}
+
+.prose-docs ul {
+  list-style: disc;
+}
+
+.prose-docs ol {
+  list-style: decimal;
+}
+
+.prose-docs code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-surface-2);
+  border-radius: 0.25rem;
+  padding: 0.15em 0.4em;
+}
+
+.prose-docs pre {
+  margin-top: 1.25rem;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  background: var(--color-terminal-bg);
+  color: var(--color-terminal-ink);
+  padding: 1.1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.prose-docs pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose-docs table {
+  margin-top: 1.5rem;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.prose-docs th {
+  text-align: left;
+  color: var(--color-ink-label);
+  font-weight: 500;
+  border-bottom: 1px solid var(--color-hairline);
+  padding: 0.5rem 0.75rem 0.5rem 0;
+}
+
+.prose-docs td {
+  border-bottom: 1px solid var(--color-hairline-soft);
+  padding: 0.6rem 0.75rem 0.6rem 0;
+  color: var(--color-ink-secondary);
+}
+
+.prose-docs strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.reveal {
+  opacity: 0;
+}
+
+.reveal.is-visible {
+  animation: var(--animate-fade-up);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    animation: none !important;
+  }
+
+  /* Ops panel: edges render fully drawn, packets don't exist. */
+  .edge-draw {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+
+  .packet {
+    display: none !important;
+  }
+
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
