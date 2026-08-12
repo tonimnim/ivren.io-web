@@ -1,33 +1,39 @@
 import type { MetadataRoute } from "next";
 import { docsNav } from "@/lib/nav";
+import { SITE_URL } from "@/lib/seo";
 
-const BASE_URL = "https://ivren.io";
+/** Priority reflects genuine importance, not wishful thinking. */
+const PRIMARY = ["/product", "/download", "/pricing", "/security", "/glossary"];
+const LEGAL = ["/privacy", "/terms", "/eula", "/refund", "/accessibility"];
 
 const ROUTES = [
   "",
-  "/product",
-  "/download",
+  ...PRIMARY,
   "/docs",
-  "/pricing",
-  "/security",
   "/company",
   "/licensing",
   "/changelog",
   "/brand",
-  "/accessibility",
-  "/privacy",
-  "/terms",
-  "/eula",
-  "/refund",
+  ...LEGAL,
   ...docsNav.map((d) => d.href),
 ];
+
+function priorityFor(route: string) {
+  if (route === "") return 1;
+  if (PRIMARY.includes(route)) return 0.9;
+  if (LEGAL.includes(route)) return 0.3;
+  if (route.startsWith("/docs")) return 0.7;
+  return 0.6;
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
   return ROUTES.map((route) => ({
-    url: `${BASE_URL}${route}`,
+    url: `${SITE_URL}${route}`,
     lastModified,
-    changeFrequency: "weekly" as const,
-    priority: route === "" ? 1 : 0.6,
+    changeFrequency: LEGAL.includes(route)
+      ? ("yearly" as const)
+      : ("weekly" as const),
+    priority: priorityFor(route),
   }));
 }

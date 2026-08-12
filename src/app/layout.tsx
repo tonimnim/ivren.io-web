@@ -3,6 +3,16 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { JsonLd } from "@/components/json-ld";
+import {
+  CORE_TERMS,
+  SITE_DESCRIPTION,
+  SITE_URL,
+  jsonLdGraph,
+  organizationSchema,
+  softwareSchema,
+  webSiteSchema,
+} from "@/lib/seo";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,13 +27,32 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ivren.io"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Ivren — healthcare interface assurance and integration platform",
-    template: "Ivren — %s",
+    default:
+      "Ivren — healthcare interface assurance and integration platform",
+    template: "%s — Ivren",
   },
-  description:
-    "Ivren maps, verifies, runs, and monitors the data interfaces inside a hospital. Reads the configuration your interface engine already produces. Runs entirely on your machine.",
+  description: SITE_DESCRIPTION,
+  keywords: [...CORE_TERMS],
+  applicationName: "Ivren",
+  category: "Healthcare software",
+  alternates: { canonical: SITE_URL },
+  authors: [{ name: "Ivren", url: SITE_URL }],
+  creator: "Ivren",
+  publisher: "Ivren",
+  formatDetection: { telephone: false, address: false, email: false },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -34,9 +63,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Ivren — healthcare interface assurance and integration platform",
-    description:
-      "Ivren maps, verifies, runs, and monitors the data interfaces inside a hospital. Runs entirely on your machine.",
-    url: "https://ivren.io",
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
     siteName: "Ivren",
     locale: "en_US",
     type: "website",
@@ -44,8 +72,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Ivren — healthcare interface assurance and integration platform",
-    description:
-      "Ivren maps, verifies, runs, and monitors the data interfaces inside a hospital. Runs entirely on your machine.",
+    description: SITE_DESCRIPTION,
   },
 };
 
@@ -62,8 +89,23 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       style={{ colorScheme: "light" }}
     >
       <body className="min-h-full flex flex-col bg-canvas text-ink">
+        <JsonLd
+          data={jsonLdGraph(
+            organizationSchema,
+            webSiteSchema,
+            softwareSchema,
+          )}
+        />
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[60] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+        >
+          Skip to content
+        </a>
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main id="main" className="flex-1">
+          {children}
+        </main>
         <SiteFooter />
       </body>
     </html>

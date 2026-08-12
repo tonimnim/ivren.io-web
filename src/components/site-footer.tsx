@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { footerColumns } from "@/lib/nav";
 import { company } from "@/lib/company";
+import { SocialLinks } from "@/components/social-links";
 
 export function SiteFooter() {
   return (
@@ -36,6 +37,8 @@ export function SiteFooter() {
               </p>
               <p className="text-white/35">{company.location}</p>
             </div>
+
+            <SocialLinks className="mt-6 -ml-2" />
 
             <p className="mt-7 max-w-xs font-mono text-xs leading-relaxed text-white/40">
               Nothing is uploaded. Ivren reads your files in one process,

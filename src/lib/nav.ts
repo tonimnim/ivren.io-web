@@ -18,7 +18,7 @@ export const mainNav: NavLink[] = [
  * keyboard and no-JS use.
  */
 export const headerNav: (NavLink & { mega?: boolean })[] = [
-  { label: "Product", href: "/product", mega: true },
+  { label: "Features", href: "/product", mega: true },
   { label: "Docs", href: "/docs" },
   { label: "Pricing", href: "/pricing" },
   { label: "Security", href: "/security" },
@@ -40,6 +40,7 @@ export const footerColumns: { title: string; links: NavLink[] }[] = [
     title: "Resources",
     links: [
       { label: "Docs", href: "/docs" },
+      { label: "Glossary", href: "/glossary" },
       { label: "How licensing & billing works", href: "/licensing" },
       { label: "Brand & press", href: "/brand" },
     ],
