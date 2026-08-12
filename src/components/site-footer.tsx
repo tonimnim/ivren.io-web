@@ -8,8 +8,8 @@ export function SiteFooter() {
     <footer className="bg-footer-deep relative overflow-hidden">
       <div aria-hidden className="bg-grid-dark absolute inset-0 -z-10" />
 
-      <div className="mx-auto w-full max-w-7xl px-5 pt-16 sm:px-8 sm:pt-20 lg:px-12">
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_2fr] lg:gap-16">
+      <div className="mx-auto w-full max-w-7xl px-5 pt-20 sm:px-8 sm:pt-24 lg:px-12 lg:pt-28">
+        <div className="grid gap-14 lg:grid-cols-[1.1fr_2fr] lg:gap-20">
           {/* brand block */}
           <div>
             <Logo onDark />
@@ -17,7 +17,7 @@ export function SiteFooter() {
               Healthcare interface assurance and integration. Runs entirely
               on your machine.
             </p>
-            <p className="mt-5 max-w-xs border-t border-white/10 pt-5 font-mono text-xs leading-relaxed text-white/40">
+            <p className="mt-7 max-w-xs font-mono text-xs leading-relaxed text-white/40">
               Nothing is uploaded. Ivren reads your files in one process,
               on your machine — and works with no internet at all.
             </p>
@@ -48,7 +48,7 @@ export function SiteFooter() {
         </div>
 
         {/* spec line */}
-        <div className="mt-14 flex flex-wrap items-center gap-2 border-t border-white/10 pt-6 font-mono text-[11px] tracking-[0.06em] text-white/40">
+        <div className="mt-20 flex flex-wrap items-center gap-2 border-t border-white/[0.06] pt-8 font-mono text-[11px] tracking-[0.06em] text-white/40">
           <span
             aria-hidden
             className="h-1.5 w-1.5 rounded-full bg-[#4ade80]/80"
@@ -58,7 +58,7 @@ export function SiteFooter() {
         </div>
 
         {/* legal strip */}
-        <div className="mt-6 space-y-2.5 text-xs leading-relaxed text-white/45">
+        <div className="mt-8 space-y-3 text-xs leading-relaxed text-white/45">
           <p>
             Ivren is not a medical device and is not intended for clinical
             decision-making.
@@ -78,9 +78,9 @@ export function SiteFooter() {
         {/* giant watermark, clipped by the footer */}
         <div
           aria-hidden
-          className="pointer-events-none relative mt-10 h-[clamp(64px,13vw,150px)] select-none"
+          className="pointer-events-none relative mt-16 h-[clamp(72px,14vw,170px)] select-none"
         >
-          <span className="font-display absolute -bottom-[0.24em] left-1/2 -translate-x-1/2 text-[clamp(5rem,20vw,17rem)] leading-none font-semibold tracking-[-0.04em] whitespace-nowrap text-white/[0.05]">
+          <span className="font-display absolute -bottom-[0.24em] left-1/2 -translate-x-1/2 bg-gradient-to-b from-white/[0.13] to-white/[0.03] bg-clip-text text-[clamp(5.5rem,21vw,18rem)] leading-none font-semibold tracking-[-0.04em] whitespace-nowrap text-transparent">
             Ivren
           </span>
         </div>
