@@ -17,3 +17,17 @@ export const company = {
    */
   downloadUrl: "",
 } as const;
+
+/**
+ * Social profiles. Only entries with a URL are rendered — an empty string
+ * means the profile is simply omitted, never linked to a guessed handle.
+ */
+export const social = {
+  linkedin: "",
+  x: "",
+  youtube: "",
+  github: "",
+  instagram: "",
+} as const;
+
+export type SocialKey = keyof typeof social;

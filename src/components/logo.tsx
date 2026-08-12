@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Wordmark } from "@/components/wordmark";
 
 export function Logo({
   className = "",
@@ -24,13 +25,7 @@ export function Logo({
         priority
         className="h-9 w-9 sm:h-10 sm:w-10"
       />
-      <span
-        className={`font-display text-xl font-semibold tracking-tight sm:text-2xl ${
-          onDark ? "text-white" : "text-ink"
-        }`}
-      >
-        Ivren
-      </span>
+      <Wordmark onDark={onDark} className="text-xl sm:text-2xl" />
     </Link>
   );
 }

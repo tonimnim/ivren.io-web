@@ -97,8 +97,8 @@ export function SiteFooter() {
           aria-hidden
           className="pointer-events-none relative mt-16 h-[clamp(72px,14vw,170px)] select-none"
         >
-          <span className="font-display absolute -bottom-[0.24em] left-1/2 -translate-x-1/2 bg-gradient-to-b from-white/[0.13] to-white/[0.03] bg-clip-text text-[clamp(5.5rem,21vw,18rem)] leading-none font-semibold tracking-[-0.04em] whitespace-nowrap text-transparent">
-            Ivren
+          <span className="font-display absolute -bottom-[0.24em] left-1/2 -translate-x-1/2 bg-gradient-to-b from-white/[0.13] to-white/[0.03] bg-clip-text text-[clamp(5.5rem,21vw,18rem)] leading-none font-semibold tracking-[-0.045em] lowercase whitespace-nowrap text-transparent">
+            ivren
           </span>
         </div>
       </div>
