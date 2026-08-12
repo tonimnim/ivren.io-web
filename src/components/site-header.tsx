@@ -128,7 +128,7 @@ export function SiteHeader() {
             }`
       }`}
     >
-      <div className="relative mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-6 sm:h-16 sm:gap-6">
+      <div className="relative mx-auto flex h-[60px] max-w-6xl items-center justify-between gap-4 px-6 sm:h-[68px] sm:gap-6">
         <Logo onDark={onDark} />
 
         <nav className="hidden items-center gap-1 md:flex">

@@ -12,7 +12,7 @@ export function SiteFooter() {
         <div className="grid gap-14 lg:grid-cols-[1.1fr_2fr] lg:gap-20">
           {/* brand block */}
           <div>
-            <Logo onDark />
+            <Logo onDark size="footer" />
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/60">
               Healthcare interface assurance and integration. Runs entirely
               on your machine.
