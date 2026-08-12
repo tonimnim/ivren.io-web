@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
-import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 
 export const metadata: Metadata = {
   title: "How licensing & billing works",
@@ -25,7 +25,7 @@ const FAQS = [
     q: "Can we get a W-9 / supplier forms?",
     a: (
       <>
-        Yes — email <Placeholder>CONTACT_EMAIL</Placeholder>.
+        Yes — email {company.email}.
       </>
     ),
   },
@@ -103,14 +103,19 @@ export default function LicensingPage() {
           <ol className="list-decimal space-y-3 pl-5">
             <li>
               Request a quote — organization, contact, tier, seat count,
-              billing period — to <Placeholder>QUOTE_ENDPOINT</Placeholder>{" "}
-              or <Placeholder>CONTACT_EMAIL</Placeholder>. We accept
-              purchase orders. Quotes within one business day.
+              billing period — to{" "}
+              <a
+                href={`mailto:${company.email}`}
+                className="text-accent hover:text-accent-strong"
+              >
+                {company.email}
+              </a>
+              , or call {company.phone}. We accept purchase orders. Quotes
+              within one business day.
             </li>
             <li>
-              Invoice (<Placeholder>PAYMENT_TERMS</Placeholder>) → on
-              payment, the license key is issued and emailed within{" "}
-              <Placeholder>FULFILLMENT_SLA</Placeholder>.
+              Invoice → on payment, the license key is issued and emailed
+              within one business day.
             </li>
             <li>
               Renewals: keys are dated; renewal issues a fresh key, with a
@@ -122,8 +127,13 @@ export default function LicensingPage() {
         <Block title="Support, not a portal maze">
           <p>
             License questions — seats, invoices, key rotation — go to{" "}
-            <Placeholder>CONTACT_EMAIL</Placeholder>, and a human fixes it
-            within a business day.
+            <a
+              href={`mailto:${company.email}`}
+              className="text-accent hover:text-accent-strong"
+            >
+              {company.email}
+            </a>
+            , and a human fixes it within a business day.
           </p>
         </Block>
 

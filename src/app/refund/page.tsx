@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
-import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 
 export const metadata: Metadata = { title: "Refund policy" };
 
@@ -8,21 +8,22 @@ export default function RefundPage() {
   return (
     <LegalPage
       title="Refund policy"
-      draftNote={
-        <>
-          Draft — pending legal review. Terms are{" "}
-          <Placeholder>REFUND_POLICY</Placeholder>.
-        </>
-      }
+      draftNote="Draft — pending legal review."
     >
       <p>
         Evaluation happens on the Trial tier before any purchase, so paid
-        licenses are entered into deliberately. Specific refund windows and
-        conditions for Professional and Enterprise purchase orders will be
-        published here once set.
+        licenses are entered into deliberately. If a purchase was made in
+        error, contact us and we will work it out.
       </p>
       <p>
-        Questions: <Placeholder>CONTACT_EMAIL</Placeholder>.
+        Refund requests:{" "}
+        <a
+          href={`mailto:${company.email}`}
+          className="text-accent hover:text-accent-strong"
+        >
+          {company.email}
+        </a>{" "}
+        or {company.phone}.
       </p>
     </LegalPage>
   );

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
-import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 
 export const metadata: Metadata = {
   title: "Accessibility statement",
@@ -32,8 +32,14 @@ export default function AccessibilityPage() {
             that way.
           </p>
           <p>
-            Known gaps: none tracked yet. If you find one, tell us —{" "}
-            <Placeholder>CONTACT_EMAIL</Placeholder>.
+            Known gaps: none tracked. If you find one, tell us —{" "}
+            <a
+              href={`mailto:${company.email}`}
+              className="text-accent hover:text-accent-strong"
+            >
+              {company.email}
+            </a>
+            .
           </p>
         </div>
       </Section>

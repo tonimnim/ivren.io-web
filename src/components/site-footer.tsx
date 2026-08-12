@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
-import { Placeholder } from "@/components/placeholder";
 import { footerColumns } from "@/lib/nav";
+import { company } from "@/lib/company";
 
 export function SiteFooter() {
   return (
@@ -17,6 +17,26 @@ export function SiteFooter() {
               Healthcare interface assurance and integration. Runs entirely
               on your machine.
             </p>
+            <div className="mt-7 space-y-1.5 font-mono text-xs text-white/50">
+              <p>
+                <a
+                  href={`mailto:${company.email}`}
+                  className="transition-colors duration-150 hover:text-white"
+                >
+                  {company.email}
+                </a>
+              </p>
+              <p>
+                <a
+                  href={company.phoneHref}
+                  className="transition-colors duration-150 hover:text-white"
+                >
+                  {company.phone}
+                </a>
+              </p>
+              <p className="text-white/35">{company.location}</p>
+            </div>
+
             <p className="mt-7 max-w-xs font-mono text-xs leading-relaxed text-white/40">
               Nothing is uploaded. Ivren reads your files in one process,
               on your machine — and works with no internet at all.
@@ -69,10 +89,7 @@ export function SiteFooter() {
             independent and is not affiliated with or endorsed by any of
             them.
           </p>
-          <p>
-            © 2026 <Placeholder>LEGAL_NAME</Placeholder>. All rights
-            reserved.
-          </p>
+          <p>© 2026 {company.legalName}. All rights reserved.</p>
         </div>
 
         {/* giant watermark, clipped by the footer */}

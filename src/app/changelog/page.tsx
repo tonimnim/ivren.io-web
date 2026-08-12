@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 
 export const metadata: Metadata = {
   title: "Changelog",
@@ -18,14 +19,15 @@ export default function ChangelogPage() {
       />
 
       <Section>
-        <div className="max-w-2xl border-t border-hairline pt-8">
-          <p className="font-mono text-sm text-ink-label">
-            Version <Placeholder>VERSION</Placeholder>
-          </p>
-          <Placeholder as="div">CHANGELOG</Placeholder>
-          <p className="mt-6 text-sm text-ink-label">
-            Until releases are public, this page shows the current version
-            only. An RSS feed will be available at{" "}
+        <div className="max-w-2xl">
+          <div className="border-t border-hairline pt-8">
+            <p className="font-mono text-sm text-accent">
+              v{company.version}
+            </p>
+            <Placeholder as="div">CHANGELOG</Placeholder>
+          </div>
+          <p className="mt-10 text-sm text-ink-label">
+            Subscribe via RSS at{" "}
             <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-xs">
               /changelog/feed.xml
             </code>

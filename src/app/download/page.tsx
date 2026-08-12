@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
-import { Placeholder } from "@/components/placeholder";
+import { Button } from "@/components/button";
+import { company } from "@/lib/company";
+
+const requestHref = `mailto:${company.email}?subject=${encodeURIComponent(
+  `Ivren ${company.version} installer request`,
+)}`;
 
 export const metadata: Metadata = {
   title: "Download",
@@ -48,7 +53,26 @@ export default function DownloadPage() {
         eyebrow="Download"
         title="Download, run, and open Ivren."
         intro="No account. No cloud requirement. Nothing is uploaded."
-      />
+      >
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <Button
+            href={company.downloadUrl || requestHref}
+            external={!company.downloadUrl}
+            className="w-full sm:w-auto"
+          >
+            {company.downloadUrl
+              ? `Download for Windows — v${company.version}`
+              : `Request the v${company.version} installer`}
+          </Button>
+          <Button
+            href="/docs/quick-start"
+            variant="secondary"
+            className="w-full sm:w-auto"
+          >
+            Read the quick start
+          </Button>
+        </div>
+      </PageHero>
 
       <Section>
         <ol className="grid gap-10 md:grid-cols-3">
@@ -83,35 +107,35 @@ export default function DownloadPage() {
             <tbody className="divide-y divide-hairline-soft">
               <tr>
                 <td className="py-3 pr-4 font-mono text-ink">
-                  <Placeholder>VERSION</Placeholder>
+                  {company.version}
                 </td>
                 <td className="py-3 pr-4 font-mono text-ink-secondary">
                   ivren-setup.exe
                 </td>
                 <td className="py-3 pr-4 text-ink-secondary">~17 MB</td>
-                <td className="py-3 font-mono text-xs text-ink-secondary">
-                  <Placeholder>SHA256_SETUP</Placeholder>
+                <td className="py-3 text-xs text-ink-label">
+                  published with the release
                 </td>
               </tr>
               <tr>
                 <td className="py-3 pr-4 font-mono text-ink">
-                  <Placeholder>VERSION</Placeholder>
+                  {company.version}
                 </td>
                 <td className="py-3 pr-4 font-mono text-ink-secondary">
                   ivren.exe (portable)
                 </td>
                 <td className="py-3 pr-4 text-ink-secondary">~15 MB</td>
-                <td className="py-3 font-mono text-xs text-ink-secondary">
-                  <Placeholder>SHA256_EXE</Placeholder>
+                <td className="py-3 text-xs text-ink-label">
+                  published with the release
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         <p className="mt-4 text-sm text-ink-label">
-          Download link: <Placeholder>DOWNLOAD_URL</Placeholder> (GitHub
-          Releases expected). Releases are signed with Ed25519 release
-          manifests.
+          Every release ships an SHA-256 checksum alongside the artifact,
+          and releases are signed with Ed25519 release manifests. Verify
+          before you install.
         </p>
       </Section>
 

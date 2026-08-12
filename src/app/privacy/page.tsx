@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
-import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 
 export const metadata: Metadata = { title: "Privacy policy" };
 
@@ -8,17 +8,11 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Privacy policy"
-      draftNote={
-        <>
-          Draft — pending legal review. The facts below are true today; the
-          full legal text is <Placeholder>PRIVACY_POLICY</Placeholder>.
-        </>
-      }
+      draftNote="Draft — pending legal review. The facts below are accurate today."
     >
       <p>
-        This site (ivren.io) sets no cookies and runs no trackers. If
-        analytics are ever added, they will be cookieless (
-        <Placeholder>ANALYTICS</Placeholder>).
+        This site (ivren.io) sets no cookies and runs no trackers, and no
+        analytics are in use.
       </p>
       <p>
         Data submitted through a contact or quote form on this site is used
@@ -33,7 +27,14 @@ export default function PrivacyPage() {
         .
       </p>
       <p>
-        Questions: <Placeholder>CONTACT_EMAIL</Placeholder>.
+        Questions:{" "}
+        <a
+          href={`mailto:${company.email}`}
+          className="text-accent hover:text-accent-strong"
+        >
+          {company.email}
+        </a>
+        .
       </p>
     </LegalPage>
   );

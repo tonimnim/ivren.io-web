@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 
 export const metadata: Metadata = {
   title: "Company",
-  description: "About Ivren.",
+  description:
+    "Ivren builds healthcare interface assurance and integration software. Based in Texas.",
 };
 
 export default function CompanyPage() {
@@ -14,6 +16,7 @@ export default function CompanyPage() {
       <PageHero
         eyebrow="Company"
         title="Built by people who read the exports nobody else would."
+        intro={`${company.legalName} builds software for the hospital interface layer — the feeds that carry orders, admissions, results, and charges between clinical systems. Based in ${company.location}.`}
       />
 
       <Section>
@@ -29,9 +32,45 @@ export default function CompanyPage() {
 
       <Section>
         <h2 className="text-xl font-medium text-ink">Contact</h2>
-        <p className="mt-3 text-base text-ink-secondary">
-          <Placeholder>CONTACT_EMAIL</Placeholder>
-        </p>
+        <dl className="mt-5 max-w-md space-y-4 text-sm">
+          <div className="flex justify-between gap-6 border-t border-hairline-soft pt-4">
+            <dt className="text-ink-label">Email</dt>
+            <dd>
+              <a
+                href={`mailto:${company.email}`}
+                className="font-mono text-accent hover:text-accent-strong"
+              >
+                {company.email}
+              </a>
+            </dd>
+          </div>
+          <div className="flex justify-between gap-6 border-t border-hairline-soft pt-4">
+            <dt className="text-ink-label">Phone</dt>
+            <dd>
+              <a
+                href={company.phoneHref}
+                className="font-mono text-ink hover:text-accent"
+              >
+                {company.phone}
+              </a>
+            </dd>
+          </div>
+          <div className="flex justify-between gap-6 border-t border-hairline-soft pt-4">
+            <dt className="text-ink-label">Location</dt>
+            <dd className="text-ink">{company.location}</dd>
+          </div>
+          <div className="flex justify-between gap-6 border-t border-hairline-soft pt-4">
+            <dt className="text-ink-label">Security reports</dt>
+            <dd>
+              <a
+                href={`mailto:${company.securityEmail}`}
+                className="font-mono text-accent hover:text-accent-strong"
+              >
+                {company.securityEmail}
+              </a>
+            </dd>
+          </div>
+        </dl>
       </Section>
     </>
   );

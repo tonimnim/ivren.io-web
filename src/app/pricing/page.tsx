@@ -2,26 +2,32 @@ import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { Button } from "@/components/button";
-import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Ivren licensing: Trial, Professional, and Enterprise tiers, billed monthly or yearly. No prices are set yet — request a quote.",
+    "Ivren licensing: a free Trial tier, plus Professional and Enterprise, billed monthly or yearly. Licenses activate offline.",
 };
 
 const TIERS = [
   {
     name: "Trial",
     blurb: "Evaluate the full product. No license required.",
+    price: "Free",
+    priceNote: "no time pressure, no account",
   },
   {
     name: "Professional",
     blurb: "For a single interface team.",
+    price: "Contact us",
+    priceNote: "billed monthly or yearly",
   },
   {
     name: "Enterprise",
     blurb: "Site licenses, fleet installs, no machine binding.",
+    price: "Contact us",
+    priceNote: "billed monthly or yearly",
   },
 ];
 
@@ -44,7 +50,7 @@ export default function PricingPage() {
     <>
       <PageHero
         eyebrow="Pricing"
-        title="Three tiers. No prices set yet."
+        title="Start free. Buy by seat or by site."
         intro="Licenses activate offline — air-gapped hospital networks are a first-class deployment, not an exception."
       />
 
@@ -59,14 +65,16 @@ export default function PricingPage() {
               <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
                 {tier.blurb}
               </p>
-              <p className="mt-6 text-xl font-medium break-all text-ink">
-                <Placeholder>{`PRICE_${tier.name.toUpperCase()}`}</Placeholder>
+              <p className="mt-6 text-2xl font-medium text-ink">
+                {tier.price}
               </p>
-              <p className="mt-1 text-xs text-ink-label">
-                billed monthly or yearly
-              </p>
-              <Button href="#contact" variant="secondary" className="mt-6">
-                Contact us
+              <p className="mt-1 text-xs text-ink-label">{tier.priceNote}</p>
+              <Button
+                href={tier.name === "Trial" ? "/download" : "#contact"}
+                variant={tier.name === "Trial" ? "primary" : "secondary"}
+                className="mt-6"
+              >
+                {tier.name === "Trial" ? "Download Ivren" : "Request a quote"}
               </Button>
             </div>
           ))}
@@ -112,40 +120,47 @@ export default function PricingPage() {
           </h2>
           <p className="mt-3 text-base leading-relaxed text-ink-secondary">
             We accept purchase orders. Quotes within one business day. Email{" "}
-            <Placeholder>CONTACT_EMAIL</Placeholder> with your organization,
-            tier, seat count, and billing period — or use the form below.
-          </p>
-          <form className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <input
-                type="text"
-                placeholder="Organization"
-                className="rounded-md border border-hairline bg-canvas px-3 py-2 text-sm outline-none focus:border-accent"
-              />
-              <input
-                type="email"
-                placeholder="Work email"
-                className="rounded-md border border-hairline bg-canvas px-3 py-2 text-sm outline-none focus:border-accent"
-              />
-            </div>
-            <textarea
-              placeholder="Tier, seat count, billing period, anything else"
-              rows={4}
-              className="w-full rounded-md border border-hairline bg-canvas px-3 py-2 text-sm outline-none focus:border-accent"
-            />
-            <button
-              type="button"
-              disabled
-              className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-md bg-accent/50 px-5 py-2.5 text-sm font-medium text-white"
+            <a
+              href={`mailto:${company.email}?subject=Ivren%20quote%20request`}
+              className="text-accent hover:text-accent-strong"
             >
-              Send request
-            </button>
-            <p className="text-xs text-ink-label">
-              Posts to <Placeholder>QUOTE_ENDPOINT</Placeholder> once
-              configured. Until then, email{" "}
-              <Placeholder>CONTACT_EMAIL</Placeholder> directly.
-            </p>
-          </form>
+              {company.email}
+            </a>{" "}
+            with your organization, tier, seat count, and billing period, or
+            call{" "}
+            <a
+              href={company.phoneHref}
+              className="text-accent hover:text-accent-strong"
+            >
+              {company.phone}
+            </a>
+            .
+          </p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button
+              href={`mailto:${company.email}?subject=${encodeURIComponent(
+                "Ivren quote request",
+              )}&body=${encodeURIComponent(
+                "Organization:\nTier (Trial / Professional / Enterprise):\nSeat count:\nBilling period (monthly / yearly):\nAnything else:",
+              )}`}
+              external
+              className="w-full sm:w-auto"
+            >
+              Request a quote
+            </Button>
+            <Button
+              href={company.phoneHref}
+              variant="secondary"
+              external
+              className="w-full sm:w-auto"
+            >
+              {company.phone}
+            </Button>
+          </div>
+          <p className="mt-4 text-xs text-ink-label">
+            We accept purchase orders and can supply W-9 and supplier
+            forms on request.
+          </p>
         </div>
       </Section>
     </>

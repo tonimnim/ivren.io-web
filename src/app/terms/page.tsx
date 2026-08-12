@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
-import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 
 export const metadata: Metadata = { title: "Terms of use" };
 
@@ -19,11 +19,18 @@ export default function TermsPage() {
         .
       </p>
       <p>
-        Governing law: <Placeholder>LEGAL_NAME</Placeholder> will specify
-        jurisdiction here once finalized.
+        {company.legalName} operates from {company.location}. Governing law
+        and jurisdiction will be stated here on completion of legal review.
       </p>
       <p>
-        Questions: <Placeholder>CONTACT_EMAIL</Placeholder>.
+        Questions:{" "}
+        <a
+          href={`mailto:${company.email}`}
+          className="text-accent hover:text-accent-strong"
+        >
+          {company.email}
+        </a>
+        .
       </p>
     </LegalPage>
   );

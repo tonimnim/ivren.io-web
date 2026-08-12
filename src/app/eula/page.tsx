@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
-import { Placeholder } from "@/components/placeholder";
+import { company } from "@/lib/company";
 
 export const metadata: Metadata = { title: "EULA" };
 
@@ -8,17 +8,11 @@ export default function EulaPage() {
   return (
     <LegalPage
       title="End-user license agreement"
-      draftNote={
-        <>
-          Draft — pending legal review. This page is a placeholder, not a
-          binding agreement. The full EULA is{" "}
-          <Placeholder>EULA</Placeholder>.
-        </>
-      }
+      draftNote="Draft — pending legal review. This page is a summary, not the binding agreement."
     >
       <p>
-        The EULA will govern use of the Ivren software (as distinct from
-        this website&rsquo;s{" "}
+        The EULA governs use of the Ivren software (as distinct from this
+        website&rsquo;s{" "}
         <a href="/terms" className="text-accent hover:text-accent-strong">
           terms of use
         </a>
@@ -30,7 +24,14 @@ export default function EulaPage() {
         , and standard warranty and liability terms.
       </p>
       <p>
-        Questions: <Placeholder>CONTACT_EMAIL</Placeholder>.
+        For a copy of the full agreement, email{" "}
+        <a
+          href={`mailto:${company.email}`}
+          className="text-accent hover:text-accent-strong"
+        >
+          {company.email}
+        </a>
+        .
       </p>
     </LegalPage>
   );
