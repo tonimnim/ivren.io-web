@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
-import { company } from "@/lib/company";
+import { company, offices } from "@/lib/company";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -49,6 +49,29 @@ export default function CompanyPage() {
             site saying something the product can&rsquo;t do, we want to
             know.&rdquo;
           </p>
+        </div>
+      </Section>
+
+      <Section>
+        <h2 className="text-xl font-medium text-ink">Offices</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-secondary">
+          Ivren runs on the customer&rsquo;s own machines, so support does
+          not depend on a data centre near you — but the people do sit
+          somewhere, and here is where.
+        </p>
+        <div className="mt-8 grid gap-px overflow-hidden rounded-xl border border-hairline bg-hairline sm:grid-cols-2 lg:grid-cols-3">
+          {offices.map((o) => (
+            <div key={o.city} className="min-w-0 bg-canvas p-6">
+              <p className="font-mono text-[10.5px] tracking-[0.14em] text-ink-label uppercase">
+                {o.role}
+              </p>
+              <h3 className="mt-2 text-lg font-medium text-ink">{o.city}</h3>
+              <p className="text-sm text-ink-secondary">{o.country}</p>
+              <p className="mt-3 border-t border-hairline-soft pt-3 text-sm leading-relaxed text-ink-secondary">
+                {o.detail}
+              </p>
+            </div>
+          ))}
         </div>
       </Section>
 

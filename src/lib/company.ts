@@ -19,6 +19,26 @@ export const company = {
 } as const;
 
 /**
+ * Mailing-list endpoint. Empty means the subscribe bar falls back to a
+ * pre-addressed mail draft rather than posting into a void.
+ */
+export const newsletterEndpoint = "";
+
+/**
+ * Offices. Only real, staffed locations belong here — a fabricated
+ * address on a vendor site is the kind of thing a procurement reviewer
+ * verifies and a CISO holds against you.
+ */
+export const offices = [
+  {
+    city: "Texas",
+    country: "United States",
+    role: "Headquarters",
+    detail: "Product, engineering, and support",
+  },
+] as const;
+
+/**
  * Social profiles. Only entries with a URL are rendered — an empty string
  * means the profile is simply omitted, never linked to a guessed handle.
  */

@@ -3,6 +3,7 @@ import { Logo } from "@/components/logo";
 import { footerColumns } from "@/lib/nav";
 import { company } from "@/lib/company";
 import { SocialLinks } from "@/components/social-links";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 
 export function SiteFooter() {
   return (
@@ -40,7 +41,11 @@ export function SiteFooter() {
 
             <SocialLinks className="mt-6 -ml-2" />
 
-            <p className="mt-7 max-w-xs font-mono text-xs leading-relaxed text-white/40">
+            <div className="mt-10">
+              <NewsletterSignup />
+            </div>
+
+            <p className="mt-9 max-w-xs font-mono text-xs leading-relaxed text-white/40">
               Nothing is uploaded. Ivren reads your files in one process,
               on your machine — and works with no internet at all.
             </p>
