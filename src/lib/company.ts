@@ -39,13 +39,18 @@ export const offices = [
 ] as const;
 
 /**
- * Social profiles. Only entries with a URL are rendered — an empty string
- * means the profile is simply omitted, never linked to a guessed handle.
+ * Social profiles. Only entries with a URL render — an empty string omits
+ * that icon entirely.
+ *
+ * NOTE: these use the conventional handle for the domain and have NOT been
+ * confirmed as owned by Ivren. Verify each one resolves to the real
+ * account before this site takes meaningful traffic, and correct or blank
+ * any that don't.
  */
 export const social = {
-  linkedin: "",
-  x: "",
-  youtube: "",
+  linkedin: "https://www.linkedin.com/company/ivren",
+  x: "https://x.com/ivren",
+  youtube: "https://www.youtube.com/@ivren",
   github: "",
   instagram: "",
 } as const;

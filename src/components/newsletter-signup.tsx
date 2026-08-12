@@ -4,7 +4,7 @@ import { useState } from "react";
 import { company, newsletterEndpoint } from "@/lib/company";
 
 /**
- * Subscribe bar. If a real list endpoint is configured it posts there;
+ * Subscribe control. If a real list endpoint is configured it posts there;
  * until then it opens a pre-addressed mail draft, so the control always
  * does something real rather than silently swallowing the address.
  */
@@ -41,57 +41,50 @@ export function NewsletterSignup() {
   }
 
   return (
-    <div>
-      <p className="font-mono text-[10.5px] font-medium tracking-[0.14em] text-white/35 uppercase">
-        Stay updated
-      </p>
-      <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/55">
-        Release notes and interface engineering write-ups. No marketing
-        cadence, no more than a handful a year.
-      </p>
-
-      <form onSubmit={onSubmit} className="mt-4 max-w-xs">
-        <div className="flex gap-2">
-          <label htmlFor="newsletter-email" className="sr-only">
-            Work email
-          </label>
-          <input
-            id="newsletter-email"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="name@hospital.org"
-            className="min-w-0 flex-1 rounded-lg border border-white/15 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-white/40 focus:outline-none"
-          />
-          <button
-            type="submit"
-            disabled={state === "sending"}
-            className="shrink-0 rounded-lg bg-white px-4 py-2 text-sm font-medium text-ink transition-colors duration-150 hover:bg-white/90 disabled:opacity-60"
-          >
-            {state === "sending" ? "…" : "Subscribe"}
-          </button>
-        </div>
-
-        <p
-          aria-live="polite"
-          className="mt-2 min-h-[1.25rem] text-xs text-white/45"
+    <form onSubmit={onSubmit} className="w-full max-w-md">
+      {/* Single bordered group: the field and its action read as one control. */}
+      <div className="flex items-center gap-2 rounded-xl border border-hairline bg-canvas p-1.5 transition-colors duration-200 focus-within:border-accent/60">
+        <label htmlFor="newsletter-email" className="sr-only">
+          Work email
+        </label>
+        <input
+          id="newsletter-email"
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="name@hospital.org"
+          className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-ink outline-none placeholder:text-ink-label"
+        />
+        <button
+          type="submit"
+          disabled={state === "sending"}
+          className="shrink-0 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] transition-colors duration-150 hover:bg-accent-strong disabled:opacity-60"
         >
-          {state === "done" && "Thanks — you're on the list."}
-          {state === "error" && (
-            <>
-              That didn&rsquo;t send. Email{" "}
-              <a
-                href={`mailto:${company.email}`}
-                className="underline underline-offset-2"
-              >
-                {company.email}
-              </a>
-              .
-            </>
-          )}
-        </p>
-      </form>
-    </div>
+          {state === "sending" ? "…" : "Subscribe"}
+        </button>
+      </div>
+
+      <p
+        aria-live="polite"
+        className="mt-3 min-h-[1.25rem] text-xs text-ink-label"
+      >
+        {state === "idle" &&
+          "Release notes and interface engineering write-ups. No cadence, no selling."}
+        {state === "done" && "Thanks — you're on the list."}
+        {state === "error" && (
+          <>
+            That didn&rsquo;t send. Email{" "}
+            <a
+              href={`mailto:${company.email}`}
+              className="text-accent underline underline-offset-2"
+            >
+              {company.email}
+            </a>
+            .
+          </>
+        )}
+      </p>
+    </form>
   );
 }
