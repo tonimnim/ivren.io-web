@@ -3,16 +3,18 @@ import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { Button } from "@/components/button";
 import { company } from "@/lib/company";
+import { pageMetadata } from "@/lib/seo";
 
 const requestHref = `mailto:${company.email}?subject=${encodeURIComponent(
   `Ivren ${company.version} installer request`,
 )}`;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Download",
+  path: "/download",
   description:
-    "Download Ivren for Windows: a guided installer or a ~15 MB portable executable. No account, no internet required.",
-};
+    "Download Ivren for Windows 10 or 11 — a guided installer or a ~15 MB portable executable. No account, no cloud requirement, and it runs fully offline.",
+});
 
 const STEPS = [
   {

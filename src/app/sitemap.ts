@@ -2,38 +2,51 @@ import type { MetadataRoute } from "next";
 import { docsNav } from "@/lib/nav";
 import { SITE_URL } from "@/lib/seo";
 
-/** Priority reflects genuine importance, not wishful thinking. */
-const PRIMARY = ["/product", "/download", "/pricing", "/security", "/glossary"];
-const LEGAL = ["/privacy", "/terms", "/eula", "/refund", "/accessibility"];
+/**
+ * lastModified is hand-maintained on purpose. Stamping `new Date()` at
+ * build time tells crawlers every page changed on every deploy, which
+ * trains them to discount the signal entirely.
+ *
+ * changeFrequency and priority are omitted — Google ignores both.
+ */
+const CONTENT_UPDATED: Record<string, string> = {
+  "": "2026-08-12",
+  "/product": "2026-08-12",
+  "/download": "2026-08-12",
+  "/pricing": "2026-08-12",
+  "/security": "2026-08-12",
+  "/glossary": "2026-08-12",
+  "/docs": "2026-08-12",
+  "/company": "2026-08-12",
+  "/licensing": "2026-08-12",
+  "/changelog": "2026-08-12",
+};
+
+const FALLBACK = "2026-08-12";
 
 const ROUTES = [
   "",
-  ...PRIMARY,
+  "/product",
+  "/download",
+  "/pricing",
+  "/security",
+  "/glossary",
   "/docs",
   "/company",
   "/licensing",
   "/changelog",
   "/brand",
-  ...LEGAL,
+  "/accessibility",
+  "/privacy",
+  "/terms",
+  "/eula",
+  "/refund",
   ...docsNav.map((d) => d.href),
 ];
 
-function priorityFor(route: string) {
-  if (route === "") return 1;
-  if (PRIMARY.includes(route)) return 0.9;
-  if (LEGAL.includes(route)) return 0.3;
-  if (route.startsWith("/docs")) return 0.7;
-  return 0.6;
-}
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
   return ROUTES.map((route) => ({
-    url: `${SITE_URL}${route}`,
-    lastModified,
-    changeFrequency: LEGAL.includes(route)
-      ? ("yearly" as const)
-      : ("weekly" as const),
-    priority: priorityFor(route),
+    url: `${SITE_URL}${route || "/"}`,
+    lastModified: CONTENT_UPDATED[route] ?? FALLBACK,
   }));
 }

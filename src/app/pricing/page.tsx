@@ -3,12 +3,14 @@ import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { Button } from "@/components/button";
 import { company } from "@/lib/company";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Pricing",
+  path: "/pricing",
   description:
-    "Ivren licensing: a free Trial tier, plus Professional and Enterprise, billed monthly or yearly. Licenses activate offline.",
-};
+    "Ivren licensing: a free Trial tier with no account, plus Professional and Enterprise, billed monthly or yearly. Licences activate offline, so air-gapped hospital networks are a first-class deployment.",
+});
 
 const TIERS = [
   {

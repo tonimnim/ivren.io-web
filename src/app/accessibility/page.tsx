@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { company } from "@/lib/company";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Accessibility statement",
+  path: "/accessibility",
   description:
-    "What this site targets for accessibility, known gaps, and how to report an issue.",
-};
+    "What ivren.io targets for accessibility (WCAG 2.2 AA), how motion is handled, and how to report an issue.",
+});
 
 export default function AccessibilityPage() {
   return (

@@ -3,11 +3,14 @@ import Image from "next/image";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { Placeholder } from "@/components/placeholder";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Brand & press",
-  description: "Ivren logo files, palette values, and a short company description for press use.",
-};
+  path: "/brand",
+  description:
+    "Ivren logo files, colour palette, and a company description you can quote.",
+});
 
 const SWATCHES = [
   { name: "Canvas", value: "#ffffff" },

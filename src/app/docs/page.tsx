@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { docsNav } from "@/lib/nav";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Docs",
-  description: "Ivren documentation: quick start, importing your estate, the console, CLI reference, licensing, security architecture, and FAQ.",
-};
+  path: "/docs",
+  description:
+    "Ivren documentation: quick start, importing your interface estate, the console, the CLI reference and its exit-code vocabulary, licensing and activation, security architecture, and FAQ.",
+});
 
 const BLURBS: Record<string, string> = {
   "/docs/quick-start": "Download, run, and open the console in three steps.",

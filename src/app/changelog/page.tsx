@@ -3,11 +3,14 @@ import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { Placeholder } from "@/components/placeholder";
 import { company } from "@/lib/company";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Changelog",
-  description: "Ivren release notes, newest first.",
-};
+  path: "/changelog",
+  description:
+    "Ivren release notes, newest first — written for the analyst who reads diffs.",
+});
 
 export default function ChangelogPage() {
   return (

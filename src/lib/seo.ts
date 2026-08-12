@@ -40,36 +40,45 @@ type PageSeoInput = {
   title: string;
   description: string;
   path: string;
-  keywords?: readonly string[];
+  ogType?: "website" | "article";
 };
 
 /**
- * Builds per-route metadata with a canonical URL. Canonicals are
- * absolute and derived from one place so they can never drift.
+ * Per-route metadata. Two things this exists to prevent:
+ *
+ * 1. Inherited `og:url`. Next merges metadata shallowly, so an
+ *    `openGraph` object defined in the root layout is inherited whole by
+ *    every descendant — making every page claim to be the homepage.
+ *    Defining openGraph per page replaces it outright.
+ * 2. Missing canonicals. Next does not emit `rel="canonical"` on its
+ *    own; `metadataBase` only resolves relative URLs. Canonical must
+ *    never be set in a layout or every page canonicalises to one URL.
  */
 export function pageMetadata({
   title,
   description,
   path,
-  keywords = [],
+  ogType = "website",
 }: PageSeoInput): Metadata {
-  const url = `${SITE_URL}${path}`;
+  const url = `${SITE_URL}${path || "/"}`;
+  // og:title does not inherit title.template — compute it once.
+  const fullTitle = path === "" ? title : `${title} — ${SITE_NAME}`;
+
   return {
     title,
     description,
-    keywords: [...keywords],
     alternates: { canonical: url },
     openGraph: {
-      title: `${title} — ${SITE_NAME}`,
+      type: ogType,
+      title: fullTitle,
       description,
       url,
       siteName: SITE_NAME,
       locale: "en_US",
-      type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} — ${SITE_NAME}`,
+      title: fullTitle,
       description,
     },
   };
@@ -133,7 +142,8 @@ export const softwareSchema = {
   "@type": "SoftwareApplication",
   "@id": `${SITE_URL}/#software`,
   name: SITE_NAME,
-  applicationCategory: "BusinessApplication",
+  // HealthApplication is a supported enum and a real topical signal.
+  applicationCategory: "HealthApplication",
   applicationSubCategory: "Healthcare integration and interface assurance",
   operatingSystem: "Windows 10, Windows 11",
   softwareVersion: company.version,

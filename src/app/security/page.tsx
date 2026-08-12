@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Security",
+  path: "/security",
   description:
-    "How Ivren draws its data boundary, its AI boundary, and its operational security posture — written for a hospital security reviewer.",
-};
+    "How Ivren draws its data boundary: nothing is uploaded, there is no telemetry and no account, credentials in imported exports are stripped, and optional AI features are gated so raw message content never leaves the machine.",
+});
 
 function Block({
   title,

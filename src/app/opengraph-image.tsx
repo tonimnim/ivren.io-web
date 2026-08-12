@@ -4,6 +4,9 @@ import { join } from "node:path";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+// Emits og:image:alt — what a text-only LLM fetcher reads in place of the image.
+export const alt =
+  "Ivren — healthcare interface assurance and integration platform";
 
 export default async function OgImage() {
   const logoData = await readFile(join(process.cwd(), "public/logo.png"));

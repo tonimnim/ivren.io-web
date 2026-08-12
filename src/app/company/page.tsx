@@ -3,12 +3,14 @@ import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { Placeholder } from "@/components/placeholder";
 import { company } from "@/lib/company";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Company",
+  path: "/company",
   description:
-    "Ivren builds healthcare interface assurance and integration software. Based in Texas.",
-};
+    "Ivren builds healthcare interface assurance and integration software for hospital IT and integration teams. Based in Texas.",
+});
 
 export default function CompanyPage() {
   return (

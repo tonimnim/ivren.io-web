@@ -3,12 +3,14 @@ import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { Button } from "@/components/button";
 import { featureGroups } from "@/lib/features";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Product",
+export const metadata: Metadata = pageMetadata({
+  title: "Features",
+  path: "/product",
   description:
-    "The full Ivren platform: estate mapping and impact analysis, regression testing and the deployment gate, the local engine, shadow-run migration, and revenue-cycle tooling.",
-};
+    "Ivren maps your interface estate, analyses downstream impact, runs regression tests against recorded traffic, gates deployments on evidence, and shadow-runs migrations — across HL7 v2, FHIR R4, DICOM, X12 and NCPDP.",
+});
 
 export default function ProductPage() {
   return (

@@ -15,15 +15,6 @@ export const metadata: Metadata = pageMetadata({
   description:
     "Plain-language definitions of the terms used in hospital integration: HL7 v2, FHIR R4, DICOM, X12, NCPDP, MLLP, ADT, ORU, DFT, Z-segments, dead-letter queues, shadow runs, and deployment gates.",
   path: "/glossary",
-  keywords: [
-    "healthcare interoperability glossary",
-    "HL7 terminology",
-    "what is MLLP",
-    "what is an interface engine",
-    "what is a Z-segment",
-    "ADT ORU DFT message types",
-    "X12 837 835 claims",
-  ],
 });
 
 const definedTermSet = {

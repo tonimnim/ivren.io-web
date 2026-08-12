@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { Section } from "@/components/container";
 import { PageHero } from "@/components/page-hero";
 import { company } from "@/lib/company";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "How licensing & billing works",
+  path: "/licensing",
   description:
-    "How Ivren licensing, activation, and purchasing work today — for procurement and security reviewers.",
-};
+    "How Ivren licensing works: signed Ed25519 keys verified locally, privacy-preserving seat binding, fully air-gapped activation, a 14-day grace period, and purchase by PO.",
+});
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (

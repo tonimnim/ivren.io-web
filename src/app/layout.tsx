@@ -5,7 +5,6 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { JsonLd } from "@/components/json-ld";
 import {
-  CORE_TERMS,
   SITE_DESCRIPTION,
   SITE_URL,
   jsonLdGraph,
@@ -34,24 +33,23 @@ export const metadata: Metadata = {
     template: "%s — Ivren",
   },
   description: SITE_DESCRIPTION,
-  keywords: [...CORE_TERMS],
   applicationName: "Ivren",
   category: "Healthcare software",
-  alternates: { canonical: SITE_URL },
   authors: [{ name: "Ivren", url: SITE_URL }],
   creator: "Ivren",
   publisher: "Ivren",
   formatDetection: { telephone: false, address: false, email: false },
+  /*
+   * max-snippet:-1 is the lever that uncaps how much of a page may be
+   * used as direct input to AI Overviews and AI Mode. These belong at
+   * the top level, not only under googleBot.
+   */
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    "max-snippet": -1,
+    "max-image-preview": "large",
+    "max-video-preview": -1,
   },
   icons: {
     icon: [
@@ -61,10 +59,17 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
+  alternates: {
+    types: { "application/rss+xml": `${SITE_URL}/changelog/feed.xml` },
+  },
+  /*
+   * No `openGraph.url` here. Metadata merges shallowly, so a url set at
+   * the layout level is inherited by every page — making each one claim
+   * to be the homepage. Pages set their own via pageMetadata().
+   */
   openGraph: {
     title: "Ivren — healthcare interface assurance and integration platform",
     description: SITE_DESCRIPTION,
-    url: SITE_URL,
     siteName: "Ivren",
     locale: "en_US",
     type: "website",

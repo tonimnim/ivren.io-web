@@ -5,6 +5,9 @@ import { TerminalPanel } from "@/components/terminal-panel";
 import { WindowChrome } from "@/components/window-chrome";
 import { Reveal } from "@/components/reveal";
 import { featureGroups } from "@/lib/features";
+import { SITE_URL } from "@/lib/seo";
+
+export const metadata = { alternates: { canonical: SITE_URL } };
 
 const PROBLEMS = [
   {
