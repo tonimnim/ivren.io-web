@@ -15,8 +15,12 @@ export function SiteFooter() {
           <div>
             <Logo onDark size="footer" />
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/60">
-              Healthcare interface assurance and integration. Runs entirely
+              The healthcare interface engine that proves it. Runs entirely
               on your machine.
+            </p>
+            <p className="mt-3 text-sm text-white/40">
+              A product of{" "}
+              <span className="text-white/60">{company.parent}</span>
             </p>
             <div className="mt-7 space-y-1.5 font-mono text-xs text-white/50">
               <p>

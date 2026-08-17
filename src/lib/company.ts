@@ -4,6 +4,8 @@
  */
 export const company = {
   legalName: "Ivren",
+  /** Parent company — a healthcare IT firm. Referenced on Company and in the footer. */
+  parent: "42degrees",
   email: "enquiry@ivren.io",
   securityEmail: "security@ivren.io",
   phone: "+1 (732) 532-8114",

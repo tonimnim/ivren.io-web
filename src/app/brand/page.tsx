@@ -93,11 +93,12 @@ export default function BrandPage() {
       <Section>
         <h2 className="text-xl font-medium text-ink">Company description</h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-secondary">
-          Ivren is a healthcare interface assurance and integration
-          platform. It maps, verifies, runs, and monitors the data
-          interfaces inside a hospital, reading the configuration exports
-          of existing interface engines and running entirely on the
-          hospital&rsquo;s own machine.
+          Ivren is a healthcare interface engine. It routes the clinical
+          messages that carry orders, admissions, results, and charges
+          between hospital systems &mdash; and, unlike any other engine,
+          records what it carried, what changed, and what a change would
+          break before it ships. It runs entirely on the hospital&rsquo;s
+          own machine. Ivren is a product of 42degrees.
         </p>
         <p className="mt-6 max-w-2xl text-sm leading-relaxed text-ink-secondary">
           Press and analyst enquiries, including requests for additional

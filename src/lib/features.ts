@@ -15,12 +15,12 @@ export const featureGroups: FeatureGroup[] = [
     key: "map",
     title: "Map",
     summary:
-      "Turn the configuration your interface engine already holds into a live map of the estate.",
+      "One estate model across every interface Ivren routes — and every one it imported on the way in.",
     items: [
       {
         name: "Estate mapping",
         description:
-          "Drop the configuration exports from a supported interface engine onto Ivren. It reads them and shows every interface: source, destinations, protocols, and which fields carry patient identifiers.",
+          "Every interface Ivren runs, in one model: source, destinations, protocols, and which fields carry patient identifiers. Findings correlate across the whole estate rather than one server's channel list — which certificates expire, which feeds run unencrypted, and exactly which interfaces depend on each.",
       },
       {
         name: "Impact analysis",
@@ -66,12 +66,17 @@ export const featureGroups: FeatureGroup[] = [
     key: "run",
     title: "Run",
     summary:
-      "Ivren runs interfaces itself — durable, crash-safe, and honest about failure.",
+      "The engine itself: listeners, one reviewed pipeline, and durable fan-out that is honest about failure.",
     items: [
       {
-        name: "Local engine",
+        name: "The engine",
         description:
-          "Durable queues (fsync-before-ack, crash-safe), MLLP/HTTP/file listeners, per-destination retry lanes with backoff, dead-letter handling, and alert-on-silence — an alert when an expected feed goes quiet.",
+          "MLLP, HTTP and file spool listeners inbound; filters and transforms through one durable, reviewed pipeline; fan-out over MLLP, HTTP, HTTPS and file. Behind it: fsync-before-ack queues, per-destination retry lanes with backoff, dead letters, replay and retention. SOAP with WS-Security and WS-Addressing, SFTP, mail and STOMP drivers ship alongside.",
+      },
+      {
+        name: "Alert-on-silence",
+        description:
+          "An alert when an expected feed goes quiet — the failure nobody notices, because an empty queue and a green dashboard look identical to a healthy one.",
       },
       {
         name: "Transforms",
@@ -94,8 +99,13 @@ export const featureGroups: FeatureGroup[] = [
     key: "migrate",
     title: "Migrate",
     summary:
-      "Prove a migration is safe before you commit to it — one interface at a time.",
+      "The on-ramp off your current engine — proved one interface at a time, not promised.",
     items: [
+      {
+        name: "Import an existing estate",
+        description:
+          "Ivren reads the configuration exports of the engine you run today and builds the estate model from them. Nobody else reads anyone else's configuration — each engine knows only its own channels — which is what makes leaving one normally a rewrite.",
+      },
       {
         name: "Shadow-run migration",
         description:

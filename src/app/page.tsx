@@ -5,9 +5,26 @@ import { TerminalPanel } from "@/components/terminal-panel";
 import { WindowChrome } from "@/components/window-chrome";
 import { Reveal } from "@/components/reveal";
 import { featureGroups } from "@/lib/features";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 
-export const metadata = { alternates: { canonical: SITE_URL } };
+const HOME_TITLE = "Ivren — the healthcare interface engine that proves it";
+
+/*
+ * openGraph is spelled out in full rather than just adding `url`:
+ * metadata merges shallowly, so a partial object here would replace the
+ * root layout's openGraph entirely and drop title/description/siteName.
+ */
+export const metadata = {
+  alternates: { canonical: SITE_URL },
+  openGraph: {
+    type: "website" as const,
+    title: HOME_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    locale: "en_US",
+  },
+};
 
 const PROBLEMS = [
   {
@@ -26,16 +43,16 @@ const PROBLEMS = [
 
 const STANCES = [
   {
-    title: "It reads the configuration you already have.",
-    body: "Ivren imports the configuration exports of supported interface engines and turns them into a live map of the estate: what talks to what, which fields carry patient identifiers, and what breaks downstream if something changes.",
+    title: "It moves the messages.",
+    body: "MLLP, HTTP and file spool inbound. HL7 v2 across twelve embedded dictionaries, plus FHIR, CDA, DICOM, X12 and NCPDP. Filters and transforms through one durable pipeline, then fan-out — with fsync-before-ack, dead letters, replay and retention behind it.",
   },
   {
-    title: "Interfaces become provable artifacts.",
-    body: "Ivren treats interface changes the way modern software treats code: versioned, tested against recorded traffic, and passed through a deployment gate that answers PASS, FAIL, or INDETERMINATE — where missing evidence can never become PASS.",
+    title: "It proves what it did.",
+    body: "Every other engine moves messages and forgets. Ivren keeps a hash-chained record of what it carried, and treats a change the way modern software treats code: versioned, tested against recorded traffic, and gated on evidence that can never become PASS by being absent.",
   },
   {
-    title: "It runs entirely on your own machine.",
-    body: "One installer, no cloud requirement, no account, and it works air-gapped. Nothing the product reads leaves the machine. Optional AI features sit behind a strict privacy boundary and are off unless configured.",
+    title: "The estate is the source of truth, not one server.",
+    body: "Certificates that expire, feeds running unencrypted, interfaces that die when a vendor moves — Ivren inventories them across the whole estate and correlates each finding to the interfaces that depend on it. No incumbent does this, because each one only knows its own channels.",
   },
 ];
 
@@ -61,14 +78,16 @@ export default function Home() {
             </p>
 
             <h1 className="mt-6 text-[clamp(2.5rem,6.5vw,4.5rem)] leading-[1.02] font-medium tracking-[-0.028em] text-balance text-white">
-              Your hospital&rsquo;s interfaces, mapped, proven,{" "}
-              <span className="font-normal text-white/50">and watched.</span>
+              The interface engine{" "}
+              <span className="font-normal text-white/50">
+                that proves it.
+              </span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-[46ch] text-base leading-[1.65] text-pretty text-white/75 sm:text-lg">
-              Ivren reads the configuration your interface engine already
-              has, shows you what talks to what, and proves changes are safe
-              before they reach production.
+            <p className="mx-auto mt-6 max-w-[52ch] text-base leading-[1.65] text-pretty text-white/75 sm:text-lg">
+              Ivren routes clinical messages like any interface engine —
+              and unlike any of them, shows you what it carried, what
+              changed, and what a change would break, before you ship it.
             </p>
 
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row sm:items-center">

@@ -8,7 +8,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Company",
   path: "/company",
   description:
-    "Ivren builds healthcare interface assurance and integration software for hospital IT and integration teams. Based in Texas.",
+    "Ivren builds a healthcare interface engine for hospital IT and integration teams. A product of 42degrees, based in Texas.",
 });
 
 export default function CompanyPage() {
@@ -17,7 +17,7 @@ export default function CompanyPage() {
       <PageHero
         eyebrow="Company"
         title="Built by people who read the exports nobody else would."
-        intro={`${company.legalName} builds software for the hospital interface layer — the feeds that carry orders, admissions, results, and charges between clinical systems. Based in ${company.location}.`}
+        intro={`${company.legalName} builds the interface engine that carries orders, admissions, results, and charges between hospital systems — and proves what it carried. A product of ${company.parent}, based in ${company.location}.`}
       />
 
       <Section>
@@ -37,10 +37,19 @@ export default function CompanyPage() {
             one can prove it is safe.
           </p>
           <p>
-            So we built the tool we wanted: it reads the configuration your
-            engine already has, shows you the estate as it actually is,
-            proves a change is safe before it ships, and runs entirely on
-            your own machine — no account, no upload, no telemetry. That
+            The incumbents&rsquo; unit of thought is the channel — a live
+            configuration object on one server, edited in place through a
+            GUI, sometimes in production at 02:00. Nobody reviews one. When
+            the person who built channel 47 leaves, the truth leaves with
+            them.
+          </p>
+          <p>
+            So we built an engine whose unit of thought is the interface as
+            a versioned artifact, with the estate — not any one server — as
+            the source of truth. It routes the same messages every engine
+            routes, and it can tell you what it carried, what changed, and
+            what a change would break before it ships. It runs entirely on
+            your own machine: no account, no upload, no telemetry. That
             last constraint is not a feature we added. It is the premise we
             started from.
           </p>

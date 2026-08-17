@@ -32,9 +32,26 @@ export const CORE_TERMS = [
   "air-gapped healthcare software",
 ] as const;
 
-/** One canonical description used as the default across the site. */
+/**
+ * The tagline. Claims the category an evaluator's checklist actually
+ * has, then the difference.
+ */
+export const SITE_TAGLINE = "The interface engine that proves it.";
+
+/** Default title. Leads with the category term buyers search for. */
+export const SITE_TITLE =
+  "Ivren — the healthcare interface engine that proves it";
+
+/**
+ * One canonical description used as the default across the site.
+ *
+ * Ivren IS the interface engine — it routes clinical messages. Reading
+ * an incumbent's configuration is a migration on-ramp, not the identity;
+ * describing it as a layer over the engine you already run inverts the
+ * product.
+ */
 export const SITE_DESCRIPTION =
-  "Ivren maps, verifies, runs, and monitors the HL7, FHIR, DICOM, X12, and NCPDP interfaces inside a hospital. It reads the configuration your interface engine already produces, proves changes are safe before they reach production, and runs entirely on your own machine — offline, with no account.";
+  "Ivren is a healthcare interface engine. It routes HL7 v2, FHIR, DICOM, X12, and NCPDP messages through one durable, audited pipeline — and unlike any other engine, shows you what it carried, what changed, and what a change would break before you ship it. Runs entirely on your own machine, offline, with no account.";
 
 type PageSeoInput = {
   title: string;
@@ -144,7 +161,8 @@ export const softwareSchema = {
   name: SITE_NAME,
   // HealthApplication is a supported enum and a real topical signal.
   applicationCategory: "HealthApplication",
-  applicationSubCategory: "Healthcare integration and interface assurance",
+  applicationSubCategory: "Healthcare interface engine",
+  slogan: SITE_TAGLINE,
   operatingSystem: "Windows 10, Windows 11",
   softwareVersion: company.version,
   description: SITE_DESCRIPTION,
@@ -152,13 +170,16 @@ export const softwareSchema = {
   downloadUrl: `${SITE_URL}/download`,
   publisher: { "@id": `${SITE_URL}/#organization` },
   featureList: [
-    "Interface estate mapping from existing engine configuration exports",
-    "Downstream impact analysis for field changes",
-    "Regression testing against recorded traffic",
+    "MLLP, HTTP and file spool listeners",
+    "HL7 v2 across twelve embedded dictionaries, plus FHIR, CDA, DICOM, X12 and NCPDP",
+    "Filters and transforms through one durable, reviewed pipeline",
+    "Fan-out over MLLP, HTTP, HTTPS and file",
+    "Durable queue with fsync-before-ack, dead letters and replay",
+    "Hash-chained audit trail and role-based access control",
     "Deployment gate with CI exit codes (PASS, FAIL, INDETERMINATE, REFUSED)",
-    "Shadow-run migration with signed divergence reports",
-    "HL7 v2, FHIR R4, DICOM, X12 and NCPDP parsing and conformance",
-    "Durable local engine with MLLP, HTTP and file listeners",
+    "Interface estate inventory correlated across mixed engines",
+    "Certificate expiry and unencrypted-feed detection",
+    "Migration on-ramp: imports an incumbent engine's configuration",
     "Alert-on-silence for feeds that stop unexpectedly",
     "Offline and air-gapped licence activation",
   ],

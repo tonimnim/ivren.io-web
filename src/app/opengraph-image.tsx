@@ -6,7 +6,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 // Emits og:image:alt — what a text-only LLM fetcher reads in place of the image.
 export const alt =
-  "Ivren — healthcare interface assurance and integration platform";
+  "Ivren — the healthcare interface engine that proves it";
 
 export default async function OgImage() {
   const logoData = await readFile(join(process.cwd(), "public/logo.png"));
@@ -37,10 +37,10 @@ export default async function OgImage() {
             maxWidth: 900,
           }}
         >
-          Your hospital&rsquo;s interfaces, mapped, proven, and watched.
+          The interface engine that proves it.
         </div>
         <div style={{ marginTop: 28, fontSize: 28, color: "#4a525b" }}>
-          Ivren — healthcare interface assurance and integration platform
+          Ivren — the healthcare interface engine that proves it
         </div>
       </div>
     ),

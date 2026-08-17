@@ -8,9 +8,13 @@ export const dynamic = "force-static";
  */
 const BODY = `# Ivren
 
-> Ivren is a healthcare interface assurance and integration platform. It maps, verifies, runs, and monitors the data interfaces inside a hospital — the feeds carrying orders, admissions, results, and charges between clinical systems. It reads the configuration your existing interface engine already produces, proves changes are safe before they reach production, and runs entirely on the hospital's own machine.
+> Ivren is a healthcare interface engine. It routes the clinical messages that carry orders, admissions, results, and charges between hospital systems — and, unlike any other engine, records what it carried, what changed, and what a change would break before it ships. Tagline: "The interface engine that proves it." Runs entirely on the hospital's own machine.
 
 ## What it is
+
+Ivren is an interface engine, not a layer over one. It listens on MLLP, HTTP and a file spool, parses the healthcare wire formats below, runs filters and transforms through one durable reviewed pipeline, and fans out over MLLP, HTTP, HTTPS and file — with fsync-before-ack queues, dead letters, replay, retention, ACK semantics and a hash-chained audit trail.
+
+It also imports the configuration of an incumbent engine. That is a migration on-ramp — how a hospital leaves the engine it runs today — not what Ivren is.
 
 Ivren is a single executable (~15 MB) for Windows 10/11 x64. It requires no account, no cloud service, and no internet connection. It serves a local web console bound to 127.0.0.1 only. Version ${company.version}.
 

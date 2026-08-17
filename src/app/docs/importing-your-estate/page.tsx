@@ -7,9 +7,11 @@ export default function ImportingPage() {
     <div>
       <h1>Importing your estate</h1>
       <p>
-        Ivren reads the configuration exports your interface engine already
-        produces. Nothing is uploaded — files are read in one process, on
-        your machine.
+        Ivren is the engine, but you almost certainly already run one. So
+        it reads the configuration exports your current engine produces
+        and builds the estate model from them — the on-ramp off it, rather
+        than a rewrite. Nothing is uploaded; files are read in one
+        process, on your machine.
       </p>
 
       <h2 id="supported-engines">Supported engines</h2>
