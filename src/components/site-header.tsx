@@ -284,7 +284,7 @@ export function SiteHeader() {
           </button>
 
           <Link
-            href="/request-access"
+            href="/get-started"
             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 ease-out ${
               onDark
                 ? "bg-white text-ink shadow-[0_1px_2px_rgb(4_12_20/0.35)] hover:bg-white/90"
@@ -342,7 +342,7 @@ export function SiteHeader() {
             ))}
           </nav>
           <Link
-            href="/request-access"
+            href="/get-started"
             className="mt-2 flex items-center justify-center rounded-full bg-accent px-4 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-accent-strong"
           >
             Get started

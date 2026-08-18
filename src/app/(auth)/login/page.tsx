@@ -19,8 +19,8 @@ export default function LoginPage() {
       footer={
         <>
           No organisation yet?{" "}
-          <Link href="/request-access" className="text-accent hover:text-accent-strong">
-            Request access
+          <Link href="/get-started" className="text-accent hover:text-accent-strong">
+            Get started
           </Link>
         </>
       }

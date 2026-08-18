@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AuthShell } from "@/components/auth/auth-shell";
-import { RequestAccessForm } from "@/components/auth/request-access-form";
+import { GetStartedForm } from "@/components/auth/get-started-form";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Request access",
-  path: "/request-access",
+  title: "Get started",
+  path: "/get-started",
   description:
-    "Request an Ivren organisation. Accounts are provisioned by a person, then you download the engine and activate it with your licence key.",
+    "Start with Ivren free. Use the hosted console, install the engine locally, or both.",
 });
 
-export default function RequestAccessPage() {
+export default function GetStartedPage() {
   return (
     <AuthShell
-      title="Request access"
-      intro="We provision your organisation and send your licence key, usually within a business day."
+      title="Get started"
+      intro="Free to start — hosted console, local engine, or both."
       footer={
         <>
           Already have an organisation?{" "}
@@ -25,7 +25,7 @@ export default function RequestAccessPage() {
         </>
       }
     >
-      <RequestAccessForm />
+      <GetStartedForm />
     </AuthShell>
   );
 }
