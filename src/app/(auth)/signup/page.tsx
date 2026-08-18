@@ -14,6 +14,7 @@ export const metadata: Metadata = pageMetadata({
 export default function SignupPage() {
   return (
     <AuthShell
+      eyebrow="Get started"
       title="Get started with Ivren"
       intro="Create your organisation to issue a licence key and download the engine. Takes a minute."
       footer={

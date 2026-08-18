@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { PreFooterCta } from "@/components/pre-footer-cta";
 import { JsonLd } from "@/components/json-ld";
 import {
   SITE_DESCRIPTION,
@@ -102,18 +99,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             softwareSchema,
           )}
         />
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[60] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:text-white"
-        >
-          Skip to content
-        </a>
-        <SiteHeader />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <PreFooterCta />
-        <SiteFooter />
+        {children}
       </body>
     </html>
   );

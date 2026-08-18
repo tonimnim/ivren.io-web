@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Field } from "@/components/auth/field";
+import Link from "next/link";
+import { Field, FormError, SubmitButton } from "@/components/auth/field";
 
 type Created = {
   org?: { id?: string; name?: string };
@@ -9,24 +10,24 @@ type Created = {
 };
 
 export function SignupForm() {
-  const [state, setState] = useState<"idle" | "sending">("idle");
+  const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [created, setCreated] = useState<Created | null>(null);
+  const [copied, setCopied] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
-    setState("sending");
+    setPending(true);
 
-    const form = new FormData(e.currentTarget);
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(Object.fromEntries(form)),
+      body: JSON.stringify(Object.fromEntries(new FormData(e.currentTarget))),
     });
     const body = await res.json().catch(() => ({}));
 
-    setState("idle");
+    setPending(false);
     if (!res.ok) {
       setError(body.error ?? "That didn't go through.");
       return;
@@ -34,46 +35,102 @@ export function SignupForm() {
     setCreated(body);
   }
 
-  // The API key comes back exactly once. Showing it plainly, with the
-  // warning attached, beats letting someone discover that later.
+  // The key is returned exactly once. Showing it plainly with the warning
+  // attached beats letting someone discover that after they navigate away.
   if (created) {
     const key = created.api_key?.key;
     return (
       <div>
-        <p className="text-sm font-medium text-ok">Organisation created.</p>
-        <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
-          Copy your API key now — it is shown once and cannot be retrieved
-          again. You will paste it into Ivren to activate your licence.
+        <div className="flex items-center gap-2 text-ok">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+            <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.4" />
+            <path
+              d="M5 8.2l2 2 4-4.4"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <p className="text-sm font-medium">Organisation created</p>
+        </div>
+
+        <p className="mt-3 text-sm leading-relaxed text-ink-secondary">
+          Copy your API key now. It is shown once and cannot be retrieved
+          again — you will paste it into Ivren to activate your licence.
         </p>
+
         {key && (
-          <pre className="mt-4 overflow-x-auto rounded-lg bg-terminal-bg px-4 py-3 font-mono text-xs text-terminal-ink">
-            {key}
-          </pre>
+          <div className="mt-5 overflow-hidden rounded-xl border border-hairline">
+            <div className="flex items-center justify-between border-b border-white/10 bg-terminal-bg px-3 py-2">
+              <span className="font-mono text-[10.5px] tracking-[0.12em] text-white/40 uppercase">
+                API key
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard?.writeText(key);
+                  setCopied(true);
+                }}
+                className="rounded px-2 py-1 font-mono text-[11px] text-white/60 transition-colors hover:text-white"
+              >
+                {copied ? "copied" : "copy"}
+              </button>
+            </div>
+            <pre className="overflow-x-auto bg-terminal-bg px-3 py-3 font-mono text-xs break-all whitespace-pre-wrap text-terminal-ink">
+              {key}
+            </pre>
+          </div>
         )}
+
         {created.org?.id && (
-          <p className="mt-4 text-xs text-ink-label">
+          <p className="mt-4 text-xs leading-relaxed text-ink-label">
             Organisation ID{" "}
-            <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono">
+            <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-ink">
               {created.org.id}
             </code>{" "}
-            — you need this to sign in.
+            — you need this to sign in. Keep it somewhere your team can find
+            it.
           </p>
         )}
-        <a
+
+        <Link
           href="/login"
-          className="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-accent-strong"
+          className="mt-7 flex w-full items-center justify-center rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] transition-colors duration-150 hover:bg-accent-strong"
         >
           Continue to sign in
-        </a>
+        </Link>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <Field id="name" label="Organisation" required maxLength={200} placeholder="Mercy General Hospital" />
-      <Field id="admin_name" label="Your name" required maxLength={200} placeholder="Alex Okoro" autoComplete="name" />
-      <Field id="admin_email" label="Work email" type="email" required maxLength={320} placeholder="alex@hospital.org" autoComplete="email" />
+    <form onSubmit={onSubmit} className="space-y-5" noValidate>
+      <Field
+        id="name"
+        label="Organisation"
+        required
+        maxLength={200}
+        placeholder="Mercy General Hospital"
+        autoComplete="organization"
+      />
+      <Field
+        id="admin_name"
+        label="Your name"
+        required
+        maxLength={200}
+        placeholder="Alex Okoro"
+        autoComplete="name"
+      />
+      <Field
+        id="admin_email"
+        label="Work email"
+        type="email"
+        required
+        maxLength={320}
+        placeholder="alex@hospital.org"
+        autoComplete="email"
+      />
       <Field
         id="admin_password"
         label="Password"
@@ -85,19 +142,23 @@ export function SignupForm() {
         hint="At least 12 characters."
       />
 
-      {error && (
-        <p aria-live="polite" className="text-sm text-flag">
-          {error}
-        </p>
-      )}
+      <FormError message={error} />
 
-      <button
-        type="submit"
-        disabled={state === "sending"}
-        className="w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] transition-colors duration-150 hover:bg-accent-strong disabled:opacity-60"
-      >
-        {state === "sending" ? "Creating…" : "Create organisation"}
-      </button>
+      <SubmitButton pending={pending} pendingLabel="Creating…">
+        Create organisation
+      </SubmitButton>
+
+      <p className="text-xs leading-relaxed text-ink-label">
+        By creating an organisation you agree to the{" "}
+        <Link href="/terms" className="underline underline-offset-2">
+          terms
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy" className="underline underline-offset-2">
+          privacy policy
+        </Link>
+        .
+      </p>
     </form>
   );
 }

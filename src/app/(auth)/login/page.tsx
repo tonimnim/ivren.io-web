@@ -14,6 +14,7 @@ export const metadata: Metadata = pageMetadata({
 export default function LoginPage() {
   return (
     <AuthShell
+      eyebrow="Sign in"
       title="Sign in"
       intro="Manage your licences, seats, and users."
       footer={
