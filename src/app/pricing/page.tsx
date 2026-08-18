@@ -9,7 +9,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Pricing",
   path: "/pricing",
   description:
-    "Ivren licensing: a free Trial tier with no account, plus Professional and Enterprise, billed monthly or yearly. Licences activate offline, so air-gapped hospital networks are a first-class deployment.",
+    "Ivren licensing: a free Trial tier, plus Professional and Enterprise, billed monthly or yearly. Licences activate offline, so air-gapped hospital networks are a first-class deployment.",
 });
 
 const TIERS = [
@@ -17,7 +17,7 @@ const TIERS = [
     name: "Trial",
     blurb: "Evaluate the full product. No license required.",
     price: "Free",
-    priceNote: "no time pressure, no account",
+    priceNote: "no time pressure",
   },
   {
     name: "Professional",

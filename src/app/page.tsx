@@ -123,7 +123,7 @@ export default function Home() {
                 HL7 v2 · FHIR R4 · DICOM · X12 · NCPDP
               </span>
               <span className="text-white/40">
-                Runs offline · No account · No telemetry
+                Runs offline · Never phones home · No telemetry
               </span>
             </div>
           </div>
@@ -281,7 +281,7 @@ export default function Home() {
               Download Ivren.
             </h2>
             <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-secondary">
-              One ~15 MB executable for Windows. No account. No internet
+              One ~15 MB executable for Windows. Never phones home. No internet
               required. Evaluate on the Trial tier, or explore with sample
               data first.
             </p>

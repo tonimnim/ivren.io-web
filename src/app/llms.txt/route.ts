@@ -16,7 +16,7 @@ Ivren is an interface engine, not a layer over one. It listens on MLLP, HTTP and
 
 It also imports the configuration of an incumbent engine. That is a migration on-ramp — how a hospital leaves the engine it runs today — not what Ivren is.
 
-Ivren is a single executable (~15 MB) for Windows 10/11 x64. It requires no account, no cloud service, and no internet connection. It serves a local web console bound to 127.0.0.1 only. Version ${company.version}.
+Ivren is a single executable (~15 MB) for Windows 10/11 x64. It requires no cloud service and no internet connection to run; an ivren.io organisation issues the licence key, but the engine never calls home. It serves a local web console bound to 127.0.0.1 only. Version ${company.version}.
 
 Ivren is not an EHR, not a clinical application, and not a medical device. Clinicians do not use it. Its users are hospital IT and integration teams, and revenue-cycle, compliance, and health-information-management staff.
 
@@ -37,11 +37,11 @@ HL7 v2 (multiple versions, with an embedded data dictionary), FHIR R4, DICOM met
 
 ## Privacy and security posture
 
-Nothing is uploaded. There is no telemetry, no account, and no phone-home. Files are read in one process on the customer's machine. Passwords found inside imported engine exports are stripped at import and reported for rotation. AI features are optional, off by default, and require the customer's own model API key; field paths, counts and verdicts may cross to a model, but raw message content, untokenised values and free-text clinical fields never may — enforced by two independent gates that fail closed. Ivren is designed for HIPAA-regulated environments; it makes no certification claims.
+Nothing is uploaded. There is no telemetry and no phone-home. Files are read in one process on the customer's machine. Passwords found inside imported engine exports are stripped at import and reported for rotation. AI features are optional, off by default, and require the customer's own model API key; field paths, counts and verdicts may cross to a model, but raw message content, untokenised values and free-text clinical fields never may — enforced by two independent gates that fail closed. Ivren is designed for HIPAA-regulated environments; it makes no certification claims.
 
 ## Licensing
 
-Trial is free with no account and no time pressure. Professional and Enterprise are licensed per seat or per site, billed monthly or yearly. Licences are signed keys verified locally; activation works fully air-gapped. An expired licence never blocks activation, help, or uninstall.
+Trial is free with no time pressure. Professional and Enterprise are licensed per seat or per site, billed monthly or yearly. Licences are signed keys verified locally; activation works fully air-gapped. An expired licence never blocks activation, help, or uninstall.
 
 ## Contact
 

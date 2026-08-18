@@ -14,8 +14,7 @@ export default function SecurityArchitecturePage() {
       <h2 id="data-boundary">The data boundary</h2>
       <p>
         Ivren reads interface configuration and message structure on the
-        customer&rsquo;s machine. There is no telemetry, no account, no
-        phone-home. Passwords found inside imported exports are stripped at
+        customer&rsquo;s machine. There is no telemetry and no phone-home. Passwords found inside imported exports are stripped at
         import and reported for rotation — they never render in the UI.
         The message archive, when the engine runs interfaces, is the only
         component holding raw message content; it lives on customer-managed

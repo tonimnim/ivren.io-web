@@ -191,8 +191,8 @@ export function SiteHeader() {
                               Download Ivren
                             </span>
                             <span className="mt-0.5 block text-xs leading-relaxed text-ink-secondary">
-                              One ~15 MB executable. No account, works
-                              offline.
+                              One ~15 MB executable. Runs offline, never
+                              phones home.
                             </span>
                           </Link>
                           {[
@@ -218,8 +218,8 @@ export function SiteHeader() {
                           aria-hidden
                           className="h-1.5 w-1.5 rounded-full bg-ok"
                         />
-                        runs entirely on your machine — offline, no account,
-                        no telemetry
+                        runs entirely on your machine — offline, never phones
+                        home, no telemetry
                       </div>
                     </div>
                   </div>
@@ -284,14 +284,14 @@ export function SiteHeader() {
           </button>
 
           <Link
-            href="/download"
+            href="/signup"
             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 ease-out ${
               onDark
                 ? "bg-white text-ink shadow-[0_1px_2px_rgb(4_12_20/0.35)] hover:bg-white/90"
                 : "bg-accent text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_1px_2px_rgb(13_99_179/0.2)] hover:bg-accent-strong"
             }`}
           >
-            Download
+            Get started
           </Link>
         </div>
 
@@ -342,10 +342,10 @@ export function SiteHeader() {
             ))}
           </nav>
           <Link
-            href="/download"
+            href="/signup"
             className="mt-2 flex items-center justify-center rounded-full bg-accent px-4 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-accent-strong"
           >
-            Download Ivren
+            Get started
           </Link>
         </div>
       )}

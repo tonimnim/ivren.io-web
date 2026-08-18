@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Download",
   path: "/download",
   description:
-    "Download Ivren for Windows 10 or 11 — a guided installer or a ~15 MB portable executable. No account, no cloud requirement, and it runs fully offline.",
+    "Download Ivren for Windows 10 or 11 — a guided installer or a ~15 MB portable executable. No cloud requirement, and it runs fully offline.",
 });
 
 const STEPS = [
@@ -43,7 +43,7 @@ const STEPS = [
 ];
 
 const FACTS = [
-  "No account. No license needed to evaluate (Trial tier).",
+  "Your licence key comes from your ivren.io organisation. The engine itself never calls us to run.",
   "No internet connection required — the product is fully functional offline; the console is served locally at 127.0.0.1 and never binds a public interface.",
   "The optional AI features are the only thing that ever needs a network, are off by default, and require explicit configuration. See Security.",
 ];
@@ -54,7 +54,7 @@ export default function DownloadPage() {
       <PageHero
         eyebrow="Download"
         title="Download, run, and open Ivren."
-        intro="No account. No cloud requirement. Nothing is uploaded."
+        intro="No cloud requirement. Nothing is uploaded. The engine never phones home."
       >
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
           <Button

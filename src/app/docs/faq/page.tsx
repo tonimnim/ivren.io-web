@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "FAQ" };
 const FAQS = [
   {
     q: "Is my data uploaded anywhere?",
-    a: "No. Ivren reads your files in one process, on your machine. There is no telemetry, no account, and no phone-home. It works with no internet connection at all.",
+    a: "No. Ivren reads your files in one process, on your machine. There is no telemetry and no phone-home. It works with no internet connection at all.",
   },
   {
     q: "Do I need to replace my engine to use this?",

@@ -6,7 +6,7 @@ export default function QuickStartPage() {
   return (
     <div>
       <h1>Quick start</h1>
-      <p>Three steps, no account required.</p>
+      <p>Three steps. Your licence key comes from your ivren.io organisation; the engine itself never calls us to run.</p>
 
       <h2 id="download">Download</h2>
       <p>

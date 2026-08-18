@@ -80,8 +80,8 @@ export function SiteFooter() {
             aria-hidden
             className="h-1.5 w-1.5 rounded-full bg-[#4ade80]/80"
           />
-          HL7 v2 · FHIR R4 · DICOM · X12 · NCPDP — runs offline, no
-          account, no telemetry
+          HL7 v2 · FHIR R4 · DICOM · X12 · NCPDP — runs offline, never
+          phones home, no telemetry
         </div>
 
         {/* legal strip */}

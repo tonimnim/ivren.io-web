@@ -51,7 +51,7 @@ export const SITE_TITLE =
  * product.
  */
 export const SITE_DESCRIPTION =
-  "Ivren is a healthcare interface engine. It routes HL7 v2, FHIR, DICOM, X12, and NCPDP messages through one durable, audited pipeline — and unlike any other engine, shows you what it carried, what changed, and what a change would break before you ship it. Runs entirely on your own machine, offline, with no account.";
+  "Ivren is a healthcare interface engine. It routes HL7 v2, FHIR, DICOM, X12, and NCPDP messages through one durable, audited pipeline — and unlike any other engine, shows you what it carried, what changed, and what a change would break before you ship it. Runs entirely on your own machine, offline, and never phones home.";
 
 type PageSeoInput = {
   title: string;
@@ -188,7 +188,7 @@ export const softwareSchema = {
     price: "0",
     priceCurrency: "USD",
     description:
-      "Free Trial tier — full product, no account required. Professional and Enterprise licensing available.",
+      "Free Trial tier — the full product, no time limit. Professional and Enterprise licensing available.",
   },
 };
 
