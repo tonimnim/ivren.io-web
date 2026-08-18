@@ -42,6 +42,24 @@ export interface paths {
          * Provision an org, its first admin and its first API key
          * @description The bootstrap. Every other route needs a key, and this is where the
          *     first one comes from, so it cannot itself require one.
+         *
+         *     **Two lanes, one route.** The vendor presents
+         *     ``X-Ivren-Provisioning-Token`` and gets what it has always got: any seat
+         *     count, no throttle. The marketing site's backend presents
+         *     ``X-Ivren-Signup-Token`` and gets a deliberately smaller version of the same
+         *     capability — at most ``SIGNUP_MAX_SEATS``, under a deployment-wide hourly
+         *     cap. The self-serve form used to present the vendor's token, which meant an
+         *     internet-facing service was holding the deployment root secret; splitting
+         *     the credential is what makes a leak on that side a nuisance rather than an
+         *     incident.
+         *
+         *     **The lane is chosen by which header arrived, not by which one validates.**
+         *     A caller presenting a wrong provisioning token is refused rather than
+         *     silently retried against the signup secret. Falling through would make the
+         *     stronger credential's failure indistinguishable from the weaker one's, and
+         *     would let somebody probing for one discover the other exists by watching
+         *     which guess got further. The provisioning header wins when both are sent,
+         *     because a request carrying the vendor's secret is a vendor request.
          */
         post: operations["create_org_auth_orgs_post"];
         delete?: never;
@@ -102,6 +120,136 @@ export interface paths {
          *     authenticated the request.
          */
         post: operations["logout_auth_logout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/password/reset-request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send a password reset link, if the account exists
+         * @description Public, and deliberately incapable of telling anyone anything.
+         *
+         *     202 with one identical body on every path: a real account, an address nobody
+         *     holds, an org that does not exist, a seat provisioned without a password,
+         *     and a request the rate limit refused. A reset form is the cheapest account
+         *     enumeration surface a product has — it is public by necessity and takes an
+         *     email address as input — so the *only* thing that varies between those five
+         *     cases is what happens in a mailbox nobody but the account holder can read.
+         *
+         *     **The token is minted before the account is known.** That is not tidiness:
+         *     it is the same argument ``_verify_or_burn`` makes one screen up. Work that
+         *     happens only on the hit path is work an attacker can time.
+         *
+         *     **The residual asymmetry is the SMTP round trip, and it is real.** A hit
+         *     talks to a relay and a miss does not, and no amount of local burning
+         *     reproduces that. Bounding it (``email.SEND_TIMEOUT_SECONDS``) caps how much
+         *     signal there is; removing it needs the send to happen off the request path,
+         *     which is a queue this service does not have. Recorded here rather than
+         *     papered over — the uniform body is a real defence, and claiming the timing
+         *     is uniform too would be the overstatement, not the gap.
+         */
+        post: operations["request_password_reset_auth_password_reset_request_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/password/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Set a new password using a reset link
+         * @description Exchange a token for a new password, and end everything it may have leaked to.
+         *
+         *     Three things happen on success and the order is load-bearing.
+         *
+         *     **The token is burned first.** If the write that follows fails, the link is
+         *     dead and the password is unchanged — the person asks again and gets a fresh
+         *     link. Burning it *after* would mean a failure between the two left a live
+         *     link for an account whose password had already changed, which is the one
+         *     outcome that is worse than either clean result.
+         *
+         *     **Every live session for the user is revoked.** A reset is recovery from a
+         *     *possible compromise*: the ordinary reason someone uses this endpoint is
+         *     that they no longer trust who holds their credential, and whoever else holds
+         *     it may hold a live browser too. Changing the password and leaving those
+         *     sessions up would produce a reset that accomplished nothing against the case
+         *     it exists for. The caller is not signed in here — they arrived with a token,
+         *     not a session — so there is nothing to keep.
+         *
+         *     **The address is stamped verified.** A link that only exists in one mailbox,
+         *     consumed, is proof that whoever consumed it controls that mailbox. That is
+         *     exactly what an email verification flow asks for and exactly what it proves,
+         *     so verification falls out of this endpoint for free rather than needing a
+         *     second token, a second mail and a second table. It is written in the same
+         *     call as the password so there is no state where the credential changed and
+         *     the proof was lost.
+         *
+         *     ``mail.enabled`` is checked even though nothing is sent, because a
+         *     deployment that cannot issue links has no honest business honouring one: a
+         *     token presented to it either predates the misconfiguration or was not ours.
+         */
+        post: operations["reset_password_auth_password_reset_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/password/change": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Change your own password while signed in
+         * @description A person changing their own credential. Nobody else's, ever.
+         *
+         *     There is no user id in the path or the body, so the only account this can
+         *     reach is the one that authenticated the request — the same construction
+         *     ``logout`` uses, and for the same reason. An administrator who needs to give
+         *     somebody a new password sends them through the reset flow; there is
+         *     deliberately no route by which one person sets another's, because such a
+         *     route is a way to take over a colleague's account and leave the audit trail
+         *     pointing at them.
+         *
+         *     **API keys are refused.** A key belongs to the org and may have no person
+         *     behind it, so "your own password" names nothing it could act on. Same status
+         *     and same body as an API key on ``/auth/users`` — see
+         *     ``dependencies.person_only`` for why this is a credential-kind check rather
+         *     than an entry in the role registry.
+         *
+         *     **Every other session dies, and the caller's does not.** The person is at
+         *     their desk with a working browser and no reason to be thrown out of it. The
+         *     others go because "change my password" is also what somebody does when a
+         *     laptop goes missing, and a change that left the missing laptop signed in
+         *     would be the same empty gesture the reset flow refuses to make.
+         *
+         *     No mail is sent and no relay is required. Nothing here needs an inbox: the
+         *     caller has already proved who they are with a session and a password.
+         */
+        post: operations["change_password_auth_password_change_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1365,6 +1513,21 @@ export interface components {
          */
         Category: "ehr" | "lis" | "ris" | "pacs" | "pharmacy" | "billing" | "payer" | "registry" | "hie" | "other";
         /**
+         * ChangePasswordRequest
+         * @description Change your own password while signed in.
+         *
+         *     ``current_password`` carries no ``min_length``, exactly as ``LoginRequest``'s
+         *     does not: a length rule belongs where a password is *set*, and enforcing one
+         *     on the value being *checked* would refuse a short password before verifying
+         *     it and answer faster than a real check does.
+         */
+        ChangePasswordRequest: {
+            /** Current Password */
+            current_password: string;
+            /** New Password */
+            new_password: string;
+        };
+        /**
          * CodeMapping
          * @description Local value translation — where migration effort actually goes.
          *
@@ -2240,6 +2403,54 @@ export interface components {
              * @default 1
              */
             first_sequence: number;
+        };
+        /**
+         * ResetPasswordRequest
+         * @description Exchange a reset token for a new password.
+         *
+         *     No ``org_id`` and no email. The token identifies the account by itself —
+         *     it is bound to one (org, user) at mint time — so there is nothing here for a
+         *     caller to get wrong or to substitute. A body that also named the account
+         *     would be a second source of truth about who is being reset, and the two
+         *     disagreeing is how somebody resets the wrong person.
+         */
+        ResetPasswordRequest: {
+            /** Token */
+            token: string;
+            /** New Password */
+            new_password: string;
+        };
+        /**
+         * ResetRequestRequest
+         * @description Ask for a reset link. The second and last route where a caller names an org.
+         *
+         *     Necessarily, and for login's reason: there is no credential yet to read one
+         *     off, and ``users.email`` is unique per org rather than globally. Naming the
+         *     org grants nothing here either — the answer is the same 202 whether the org
+         *     exists or not, and the thing that arrives is a mail to an address the caller
+         *     has to already control.
+         */
+        ResetRequestRequest: {
+            /** Org Id */
+            org_id: string;
+            /** Email */
+            email: string;
+        };
+        /**
+         * ResetRequestedView
+         * @description The whole of what a reset request returns, and it is a constant.
+         *
+         *     A model with one field whose value never varies, which is the point: there
+         *     is no branch in the handler that can put anything else here, so "the answer
+         *     does not depend on whether the account exists" is a property of the type
+         *     rather than a promise four return statements are trusted to keep.
+         */
+        ResetRequestedView: {
+            /**
+             * Detail
+             * @default if that organization and address have an account, a reset link is on its way
+             */
+            detail: string;
         };
         /**
          * ResolveRequest
@@ -3150,8 +3361,10 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Deployment-wide secret permitting org creation. */
+                /** @description The vendor's deployment-wide secret. Creates an org with any seat count and is not throttled. Never held by an internet-facing service — see X-Ivren-Signup-Token for that. */
                 "X-Ivren-Provisioning-Token"?: string | null;
+                /** @description The self-serve signup secret, held by the marketing site's backend. Creates an org of at most 5 seats and is subject to a deployment-wide hourly cap. Accepted on this route and no other. */
+                "X-Ivren-Signup-Token"?: string | null;
             };
             path?: never;
             cookie?: never;
@@ -3179,6 +3392,13 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+            /** @description The deployment-wide hourly signup cap has been reached. Self-serve lane only. */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -3237,6 +3457,129 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    request_password_reset_auth_password_reset_request_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetRequestRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResetRequestedView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description This deployment has no mail relay configured, so no reset link can be delivered. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    reset_password_auth_password_reset_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The token was unknown, expired, already used, or replaced by a newer request. Which one is not disclosed. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description This deployment has no mail relay configured, so it issues no reset links and honours none. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    change_password_auth_password_change_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangePasswordRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The current password did not match, or the caller is an API key rather than a person. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
         };
     };

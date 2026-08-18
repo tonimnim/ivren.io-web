@@ -4,30 +4,35 @@ import { controlPlane } from "@/lib/control-plane";
 import { setSession } from "@/lib/session";
 
 /**
- * Organisation signup.
+ * Organisation signup, on the narrow signup lane.
  *
- * POST /auth/orgs is gated by a deployment-wide provisioning secret, and
- * that header is excluded from the API's CORS allow-list so a browser can
- * never send it. This route is not a browser: it runs on ivren.io's own
- * server, which is vendor infrastructure, so it holds the token in an env
- * var and presents it on the caller's behalf. The browser still cannot
- * provision an org directly — only this validated form can.
+ * Deliberately NOT the vendor provisioning token. That credential is
+ * effectively root — unlimited orgs, unlimited seats, and it reads the
+ * whole customer fleet via /fleet/summary — so parking it behind an
+ * unauthenticated public endpoint gave this route far more power than
+ * signing somebody up requires.
+ *
+ * X-Ivren-Signup-Token is accepted for org creation only, caps seats at
+ * the free-tier limit, and is globally throttled server-side. The lane is
+ * chosen by which header arrives, so a wrong token is never retried on
+ * the other lane.
  */
 const SignupSchema = z.object({
   name: z.string().min(1).max(200),
   admin_name: z.string().min(1).max(200),
   admin_email: z.string().email().max(320),
   admin_password: z.string().min(12).max(1024),
-  seats: z.coerce.number().int().positive().default(1),
+  // The signup lane caps seats server-side; never request beyond it.
+  seats: z.coerce.number().int().min(1).max(5).default(1),
 });
 
 export async function POST(request: Request) {
-  const token = process.env.IVREN_PROVISIONING_TOKEN;
+  const token = process.env.IVREN_SIGNUP_TOKEN;
   if (!token) {
     return NextResponse.json(
       {
         error:
-          "Signup is not configured on this deployment. Set IVREN_PROVISIONING_TOKEN.",
+          "Signup is not configured on this deployment. Set IVREN_SIGNUP_TOKEN.",
       },
       { status: 503 },
     );
@@ -44,19 +49,20 @@ export async function POST(request: Request) {
 
   const { data, error, response } = await controlPlane.POST("/auth/orgs", {
     body: parsed.data,
-    headers: { "X-Ivren-Provisioning-Token": token },
+    headers: { "X-Ivren-Signup-Token": token },
   });
 
   if (error || !data) {
-    const conflict = response?.status === 409;
-    return NextResponse.json(
-      {
-        error: conflict
-          ? "An organisation with that email already exists."
-          : "That didn't go through. Try again, or contact us.",
-      },
-      { status: response?.status ?? 502 },
-    );
+    const status = response?.status;
+    const message =
+      status === 409
+        ? "An organisation with that email already exists."
+        : status === 429
+          ? "Signups are busy right now. Try again shortly, or contact us."
+          : status === 422
+            ? "Some details weren't accepted. Check them and try again."
+            : "That didn't go through. Try again, or contact us.";
+    return NextResponse.json({ error: message }, { status: status ?? 502 });
   }
 
   // Sign them straight in so the next screen is the product, not a login
