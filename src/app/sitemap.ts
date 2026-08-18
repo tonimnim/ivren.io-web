@@ -33,6 +33,7 @@ const ROUTES = [
   "/glossary",
   "/docs",
   "/company",
+  "/request-access",
   "/licensing",
   "/changelog",
   "/brand",

@@ -116,9 +116,20 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Who this API key belongs to
-         * @description The CLI's connectivity and credential check, and the reference example
-         *     of what a credentialled request looks like.
+         * Who this credential belongs to, and what its role may see
+         * @description The CLI's connectivity check, and the console's first request after login.
+         *
+         *     No ``require`` on this route. Asking who you are is not a permission — a
+         *     credential that could not ask would have no way to discover that it may do
+         *     nothing, and the console's login would land on a blank page with no
+         *     explanation. Nothing here is another tenant's, and nothing here is anything
+         *     the caller did not already present.
+         *
+         *     An unknown role — a legacy string that escaped 0009, or a user row that has
+         *     gone — reports itself and an empty section list rather than defaulting to
+         *     one. The console then renders nothing and the person is told to talk to an
+         *     administrator, which is the same answer ``require`` gives their next request
+         *     and is the point of not defaulting anywhere.
          */
         get: operations["whoami_auth_me_get"];
         put?: never;
@@ -195,6 +206,75 @@ export interface paths {
          *     only report an overage that already happened.
          */
         post: operations["create_user_auth_users_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/users/{user_id}/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Change one user's role
+         * @description Move somebody between roles, and record that it happened.
+         *
+         *     Two things this refuses, and they are the same check twice over.
+         *
+         *     **Not your own role.** Read one way it is anti-escalation — an admin cannot
+         *     make themselves the owner, so the one power admins do not have stays out of
+         *     reach of the endpoint they do control. Read the other way it is
+         *     anti-lockout: the sole administrator of an org cannot demote themselves out
+         *     of the endpoint that would put them back. One rule, and the reason it is one
+         *     rule rather than two is that any exception carved for the second case
+         *     reopens the first.
+         *
+         *     **Not the last owner.** ``owner`` is the only role billing accepts for a
+         *     subscription change (``billing._require_owner``), so an org with none has no
+         *     path to its own account. Counted rather than reasoned about, because "there
+         *     is surely another owner" is the assumption that is wrong exactly once.
+         *
+         *     The event is written *after* the role change lands. A row saying somebody
+         *     became an admin when the write then failed is worse than no row: it is a
+         *     trail that disagrees with the account, and whoever reads it during an
+         *     incident will believe the trail.
+         */
+        patch: operations["set_user_role_auth_users__user_id__role_patch"];
+        trace?: never;
+    };
+    "/auth/access/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * This org's access decisions: refusals and role changes, newest first
+         * @description The org's own decisions, and only its own.
+         *
+         *     Org-scoped from the credential like every other read here: there is no
+         *     ``org_id`` in the path or the query, so another tenant's refusals are not
+         *     something this endpoint declines to show, they are something it has no input
+         *     through which to ask for.
+         *
+         *     Read by ``auditor`` as well as by the administrative roles. That is the
+         *     point of an auditor: the person who checks whether access is being
+         *     administered properly is not the person administering it.
+         */
+        get: operations["list_access_events_auth_access_events_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1071,6 +1151,45 @@ export interface components {
          * @enum {string}
          */
         Access: "read" | "write" | "delete" | "conditional";
+        /** AccessEventPage */
+        AccessEventPage: {
+            /** Events */
+            events: components["schemas"]["AccessEventView"][];
+            /** Count */
+            count: number;
+        };
+        /**
+         * AccessEventView
+         * @description One recorded decision, as the access view shows it.
+         *
+         *     Every field is a value from a closed vocabulary this codebase owns; there is
+         *     nothing here a caller wrote. That is the same property the table claims for
+         *     itself, restated at the wire so that a column later widened by accident
+         *     cannot reach a response through a model that would have carried it.
+         */
+        AccessEventView: {
+            /** Id */
+            id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Credential */
+            credential: string;
+            /** Role */
+            role: string;
+            /** Permission */
+            permission: string;
+            /** Path */
+            path: string;
+            /** Verdict */
+            verdict: string;
+            /** Actor User Id */
+            actor_user_id?: string | null;
+            /** Detail */
+            detail?: string | null;
+        };
         /**
          * ActivateRequest
          * @description A machine asking for a licence.
@@ -1357,7 +1476,7 @@ export interface components {
             display_name: string;
             /**
              * Role
-             * @default member
+             * @default engineer
              */
             role: string;
         };
@@ -1844,6 +1963,41 @@ export interface components {
             email: string;
             /** Password */
             password: string;
+        };
+        /**
+         * MeView
+         * @description The calling credential's org, plus what this caller may see of it.
+         *
+         *     Extends ``OrgView`` rather than replacing it: the CLI has been reading
+         *     ``seats`` and ``seats_used`` off this route since it existed, and a console
+         *     that needs a nav does not justify moving them.
+         *
+         *     ``role`` and ``sections`` are null and empty for an API key, and that is the
+         *     honest answer rather than a gap. A machine has no nav: nothing renders for a
+         *     CI pipeline, and inventing a role for a credential that has none would make
+         *     ``/auth/me`` the one place in the product where a key appears to hold one.
+         */
+        MeView: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Seats */
+            seats: number;
+            /** Seats Used */
+            seats_used: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Role */
+            role?: string | null;
+            /**
+             * Sections
+             * @default []
+             */
+            sections: string[];
         };
         /**
          * MessageTypeBinding
@@ -2496,6 +2650,18 @@ export interface components {
             user: components["schemas"]["UserView"];
         };
         /**
+         * SetRoleRequest
+         * @description The whole body of a role change: one role, and nothing else.
+         *
+         *     No user id — that is in the path — and no confirmation flag. A body that
+         *     could name the target would be a second place the target comes from, and
+         *     the two disagreeing is how somebody promotes the wrong person.
+         */
+        SetRoleRequest: {
+            /** Role */
+            role: string;
+        };
+        /**
          * Site
          * @description A hospital or facility.
          *
@@ -3089,7 +3255,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OrgView"];
+                    "application/json": components["schemas"]["MeView"];
                 };
             };
         };
@@ -3218,6 +3384,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_user_role_auth_users__user_id__role_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetRoleRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_access_events_auth_access_events_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccessEventPage"];
                 };
             };
             /** @description Validation Error */
