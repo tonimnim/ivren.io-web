@@ -71,7 +71,7 @@ export function RequestAccessForm() {
         min={1}
         max={10000}
         placeholder="5"
-        hint="A rough number is fine — it can change later."
+        hint="Rough is fine."
       />
 
       <div>
@@ -85,7 +85,7 @@ export function RequestAccessForm() {
           id="context"
           name="context"
           rows={3}
-          placeholder="Which engine you run today, roughly how many interfaces, timelines."
+          placeholder="Engine you run today, rough interface count, timelines."
           className="mt-2 w-full rounded-lg border border-hairline bg-paper px-3.5 py-2.5 text-sm text-ink shadow-[inset_0_1px_2px_rgb(20_24_29/0.03)] outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-ink-label/70 hover:border-ink-label/40 focus:border-accent focus:shadow-[0_0_0_3px_rgb(13_99_179/0.12)]"
         />
       </div>
@@ -93,11 +93,6 @@ export function RequestAccessForm() {
       <SubmitButton pending={pending} pendingLabel="Opening…">
         Request access
       </SubmitButton>
-
-      <p className="text-xs leading-relaxed text-ink-label">
-        We reply within one business day. Accounts are provisioned by a
-        person — there is no automated signup, deliberately.
-      </p>
     </form>
   );
 }

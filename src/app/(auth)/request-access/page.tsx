@@ -14,9 +14,8 @@ export const metadata: Metadata = pageMetadata({
 export default function RequestAccessPage() {
   return (
     <AuthShell
-      eyebrow="Get started"
-      title="Request access to Ivren"
-      intro="Tell us who you are and we'll provision your organisation, issue a licence key, and send you the installer. Usually within a business day."
+      title="Request access"
+      intro="We provision your organisation and send your licence key, usually within a business day."
       footer={
         <>
           Already have an organisation?{" "}
