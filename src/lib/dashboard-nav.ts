@@ -89,7 +89,8 @@ export const dashboardNav: NavBand[] = [
         path: "/dashboard/audit",
         status: "soon",
         caption: "Refusals and role changes, newest first",
-        section: "audit",
+        // The server calls this section "access" — verified against /auth/me.
+        section: "access",
       },
     ],
   },

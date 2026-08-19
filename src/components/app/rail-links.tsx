@@ -2,15 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import * as Icons from "lucide-react";
+import { NavIcon } from "@/components/app/nav-icon";
 import type { NavBand } from "@/lib/dashboard-nav";
 
 /**
- * The banded rail. Bands carry small-caps headings, items of a band stay
- * adjacent, and a planned screen is visible and says so — hiding unbuilt
- * work is the dishonesty this product refuses everywhere.
+ * The banded list itself, shared by the fixed rail and the mobile drawer so
+ * there is one implementation of "what the navigation looks like".
  */
-export function AppRail({ bands }: { bands: NavBand[] }) {
+export function RailLinks({
+  bands,
+  onNavigate,
+}: {
+  bands: NavBand[];
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
 
   return (
@@ -22,22 +27,17 @@ export function AppRail({ bands }: { bands: NavBand[] }) {
           </p>
           <ul className="space-y-0.5">
             {band.items.map((item) => {
-              const Icon =
-                (Icons as unknown as Record<
-                  string,
-                  React.ComponentType<{ className?: string }>
-                >)[item.icon] ?? Icons.Circle;
               const active =
-                pathname === item.path ||
-                pathname.startsWith(item.path + "/");
+                pathname === item.path || pathname.startsWith(item.path + "/");
               const soon = item.status === "soon";
 
               return (
                 <li key={item.id}>
                   <Link
                     href={item.path}
+                    onClick={onNavigate}
                     aria-current={active ? "page" : undefined}
-                    className={`group flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] transition-colors duration-150 ${
+                    className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] transition-colors duration-150 ${
                       active
                         ? "bg-accent-soft font-medium text-accent"
                         : soon
@@ -45,7 +45,8 @@ export function AppRail({ bands }: { bands: NavBand[] }) {
                           : "text-ink-secondary hover:bg-surface hover:text-ink"
                     }`}
                   >
-                    <Icon
+                    <NavIcon
+                      name={item.icon}
                       className={`h-4 w-4 shrink-0 ${
                         active
                           ? "text-accent"
