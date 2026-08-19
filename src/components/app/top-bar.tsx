@@ -42,7 +42,7 @@ export function TopBar({
   }
 
   return (
-    <header className="flex min-h-16 items-center justify-between gap-4 border-b border-hairline bg-paper px-4 py-3 sm:px-6">
+    <header className="flex h-14 shrink-0 items-center justify-between gap-4 border-b border-hairline bg-paper px-4 sm:px-6">
       <div className="flex min-w-0 items-center gap-3">
         <Drawer.Root open={drawerOpen} onOpenChange={setDrawerOpen}>
           <Drawer.Trigger
@@ -54,8 +54,8 @@ export function TopBar({
           <Drawer.Portal>
             <Drawer.Backdrop className="fixed inset-0 z-40 bg-ink/25" />
             <Drawer.Popup className="fixed inset-y-0 left-0 z-50 flex w-[264px] flex-col bg-paper">
-              <div className="flex h-16 items-center border-b border-hairline px-5">
-                <Logo />
+              <div className="flex h-14 items-center border-b border-hairline px-4">
+                <Logo size="rail" href="/dashboard" />
               </div>
               <div className="flex-1 overflow-y-auto">
                 <RailLinks
@@ -67,16 +67,19 @@ export function TopBar({
           </Drawer.Portal>
         </Drawer.Root>
 
-        <div className="min-w-0">
-          <h1 className="truncate text-[15px] font-medium text-ink">
-            {item?.label ?? "Console"}
-          </h1>
-          {item?.caption && (
-            <p className="hidden truncate text-[12.5px] text-ink-label sm:block">
-              {item.caption}
-            </p>
-          )}
-        </div>
+        <nav aria-label="Breadcrumb" className="min-w-0">
+          <ol className="flex min-w-0 items-center gap-1.5 text-[13px]">
+            <li className="hidden max-w-[14rem] truncate text-ink-label sm:block">
+              {orgName}
+            </li>
+            <li aria-hidden className="hidden text-ink-label/60 sm:block">
+              /
+            </li>
+            <li className="truncate font-medium text-ink">
+              {item?.label ?? "Console"}
+            </li>
+          </ol>
+        </nav>
       </div>
 
       <div className="flex shrink-0 items-center gap-2">

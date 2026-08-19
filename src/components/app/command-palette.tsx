@@ -66,11 +66,6 @@ export function CommandPalette({ bands }: { bands: NavBand[] }) {
                 >
                   <NavIcon name={item.icon} className="h-4 w-4 text-ink-label" />
                   <span className="truncate">{item.label}</span>
-                  {item.status === "soon" && (
-                    <span className="ml-auto font-mono text-[9.5px] tracking-[0.08em] text-ink-label uppercase">
-                      soon
-                    </span>
-                  )}
                 </Command.Item>
               ))}
             </Command.Group>

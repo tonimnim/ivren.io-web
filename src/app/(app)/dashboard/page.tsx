@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Download, KeyRound, ShieldCheck } from "lucide-react";
+import { PageHeader } from "@/components/app/page-header";
 import { StatTile } from "@/components/app/stat-tile";
 import { authHeader, controlPlane } from "@/lib/control-plane";
 import { getSession } from "@/lib/session";
@@ -43,7 +44,12 @@ export default async function OverviewPage() {
   const runs = usage?.runs ?? 0;
 
   return (
-    <div className="mx-auto max-w-5xl">
+    <>
+      <PageHeader
+        title={me.name}
+        description="Your organisation, its seats and its licence."
+      />
+
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatTile
           label="Seats used"
@@ -101,7 +107,7 @@ export default async function OverviewPage() {
                 title: "Create an API key",
                 body: "Named at creation, for CI and integrations. Engine installs get their own credential.",
                 href: "/dashboard/keys",
-                cta: "Settings",
+                cta: "API keys",
               },
               {
                 Icon: ShieldCheck,
@@ -147,6 +153,6 @@ export default async function OverviewPage() {
         </Link>
         .
       </p>
-    </div>
+    </>
   );
 }
