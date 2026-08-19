@@ -34,6 +34,13 @@ export function GetStartedForm() {
     const password = String(
       new FormData(e.currentTarget).get("admin_password") ?? "",
     );
+    if (password.length < 12) {
+      setPending(false);
+      setError(
+        "Passwords need at least 12 characters — length matters more than symbols.",
+      );
+      return;
+    }
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

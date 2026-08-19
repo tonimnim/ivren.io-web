@@ -42,10 +42,21 @@ export async function POST(request: Request) {
   const parsed = SignupSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
     // Never surface raw validator text — it leaks internals and reads badly.
-    return NextResponse.json(
-      { error: "Check the details and try again." },
-      { status: 400 },
-    );
+    // But "check the details" with no detail named sends a person hunting
+    // through four fields for a rule nothing states, so each field gets one
+    // handwritten sentence instead.
+    const field = String(parsed.error.issues[0]?.path?.[0] ?? "");
+    const message =
+      field === "admin_password"
+        ? "Passwords need at least 12 characters — length matters more than symbols."
+        : field === "admin_email"
+          ? "That email address doesn't look right."
+          : field === "name"
+            ? "Give your organisation a name."
+            : field === "admin_name"
+              ? "Tell us your name."
+              : "Check the details and try again.";
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 
   const { data, error, response } = await controlPlane.POST("/auth/orgs", {
