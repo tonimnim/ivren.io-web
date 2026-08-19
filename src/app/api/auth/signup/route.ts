@@ -22,7 +22,7 @@ const SignupSchema = z.object({
   name: z.string().min(1).max(200),
   admin_name: z.string().min(1).max(200),
   admin_email: z.string().email().max(320),
-  admin_password: z.string().min(12).max(1024),
+  admin_password: z.string().min(10).max(1024),
   // The signup lane caps seats server-side; never request beyond it.
   seats: z.coerce.number().int().min(1).max(5).default(1),
 });
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     const field = String(parsed.error.issues[0]?.path?.[0] ?? "");
     const message =
       field === "admin_password"
-        ? "Passwords need at least 12 characters — length matters more than symbols."
+        ? "Passwords need at least 10 characters — length matters more than symbols."
         : field === "admin_email"
           ? "That email address doesn't look right."
           : field === "name"

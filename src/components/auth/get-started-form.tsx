@@ -34,10 +34,10 @@ export function GetStartedForm() {
     const password = String(
       new FormData(e.currentTarget).get("admin_password") ?? "",
     );
-    if (password.length < 12) {
+    if (password.length < 10) {
       setPending(false);
       setError(
-        "Passwords need at least 12 characters — length matters more than symbols.",
+        "Passwords need at least 10 characters — length matters more than symbols.",
       );
       return;
     }
@@ -66,11 +66,11 @@ export function GetStartedForm() {
           label="Password"
           type="password"
           required
-          minLength={12}
+          minLength={10}
           maxLength={1024}
           autoComplete="new-password"
           autoFocus
-          hint="At least 12 characters."
+          hint="At least 10 characters."
         />
 
         <FormError message={error} />
