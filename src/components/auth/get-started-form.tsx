@@ -4,20 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Field, FormError, SubmitButton } from "@/components/auth/field";
 
-type Created = {
-  org?: { id?: string; name?: string };
-  api_key?: { secret?: string };
-};
-
 type Details = { name: string; admin_name: string; admin_email: string };
 
 export function GetStartedForm() {
-  const [step, setStep] = useState<"details" | "password" | "key">("details");
+  const [step, setStep] = useState<"details" | "password">("details");
   const [details, setDetails] = useState<Details | null>(null);
-  const [created, setCreated] = useState<Created | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
   const router = useRouter();
 
   function onDetails(e: React.FormEvent<HTMLFormElement>) {
@@ -47,62 +40,15 @@ export function GetStartedForm() {
       body: JSON.stringify({ ...details, admin_password: password }),
     });
     const body = await res.json().catch(() => ({}));
-    setPending(false);
 
     if (!res.ok) {
+      setPending(false);
       setError(body.error ?? "That didn't go through.");
       return;
     }
-    setCreated(body);
-    setStep("key");
-  }
-
-  // The key is returned exactly once. Showing it before the dashboard is
-  // one extra click that stops it being lost on the redirect.
-  if (step === "key") {
-    const secret = created?.api_key?.secret;
-    return (
-      <div>
-        <p className="text-sm font-medium text-ok">Organisation created</p>
-        <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
-          Your API key, shown once. You need it to activate a local install.
-        </p>
-
-        {secret && (
-          <div className="mt-5 overflow-hidden rounded-xl border border-hairline">
-            <div className="flex items-center justify-between border-b border-white/10 bg-terminal-bg px-3 py-2">
-              <span className="font-mono text-[10.5px] tracking-[0.12em] text-white/40 uppercase">
-                API key
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  navigator.clipboard?.writeText(secret);
-                  setCopied(true);
-                }}
-                className="rounded px-2 py-1 font-mono text-[11px] text-white/60 transition-colors hover:text-white"
-              >
-                {copied ? "copied" : "copy"}
-              </button>
-            </div>
-            <pre className="overflow-x-auto bg-terminal-bg px-3 py-3 font-mono text-xs break-all whitespace-pre-wrap text-terminal-ink">
-              {secret}
-            </pre>
-          </div>
-        )}
-
-        <button
-          type="button"
-          onClick={() => {
-            router.push("/dashboard");
-            router.refresh();
-          }}
-          className="mt-7 w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] transition-colors duration-150 hover:bg-accent-strong"
-        >
-          Continue to dashboard
-        </button>
-      </div>
-    );
+    // Signup signs you in — land on the console, not on a credential.
+    router.push("/dashboard");
+    router.refresh();
   }
 
   if (step === "password") {

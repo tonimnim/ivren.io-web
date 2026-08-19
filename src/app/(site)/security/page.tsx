@@ -60,6 +60,23 @@ export default function SecurityPage() {
           </p>
         </Block>
 
+        <Block title="What the hosted console holds">
+          <p>
+            Your estate configuration is processed, never stored: it travels
+            in your request, is used to compute the answer, and does not
+            exist on our servers afterward. Interface credentials are
+            stripped before an export ever leaves your network, and message
+            content never crosses at all &mdash; only field positions do. Our
+            hosted console has no storage that could hold your estate, and no
+            endpoint that could receive a patient record.
+          </p>
+          <p>
+            What the hosted side does hold is the commercial relationship:
+            your organisation, its users and their roles, seats, licensing
+            and billing, and metadata about runs. That is the whole list.
+          </p>
+        </Block>
+
         <Block title="The AI boundary">
           <p>
             AI features are optional, off by default, and require the

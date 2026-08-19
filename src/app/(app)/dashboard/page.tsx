@@ -1,94 +1,152 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Logo } from "@/components/logo";
+import { redirect } from "next/navigation";
+import { Download, KeyRound, ShieldCheck } from "lucide-react";
+import { StatTile } from "@/components/app/stat-tile";
 import { authHeader, controlPlane } from "@/lib/control-plane";
 import { getSession } from "@/lib/session";
-import { LogoutButton } from "@/components/app/logout-button";
+import { getMe } from "@/lib/me";
 
-export const metadata = { title: "Dashboard", robots: { index: false } };
+export const metadata = { title: "Overview", robots: { index: false } };
 
-/**
- * Server component: the session token is read here and never reaches the
- * browser. `sections` is the API's nav contract — render exactly what it
- * returns, never a locked-looking item the role may not use.
- */
-export default async function DashboardPage() {
+/** Tolerant read: an endpoint that is unreachable must not blank the page. */
+async function safeGet<T>(fn: () => Promise<T>): Promise<T | null> {
+  try {
+    return await fn();
+  } catch {
+    return null;
+  }
+}
+
+export default async function OverviewPage() {
+  const me = await getMe();
+  if (!me) redirect("/login");
   const token = await getSession();
-  if (!token) redirect("/login");
 
-  const { data, error } = await controlPlane.GET("/auth/me", {
-    headers: authHeader(token),
+  const licence = await safeGet(async () => {
+    const { data } = await controlPlane.GET("/licensing/status", {
+      headers: authHeader(token!),
+    });
+    return data as Record<string, unknown> | undefined;
   });
 
-  // An expired or revoked session is indistinguishable from none.
-  if (error || !data) redirect("/login");
+  const usage = await safeGet(async () => {
+    const { data } = await controlPlane.GET("/runs/usage", {
+      headers: authHeader(token!),
+    });
+    return data as { runs?: number } | undefined;
+  });
 
-  const sections = data.sections ?? [];
+  const seatsLeft = Math.max(0, me.seats - me.seats_used);
+  const entitled = Boolean(
+    licence && (licence.entitled ?? licence.active ?? false),
+  );
+  const runs = usage?.runs ?? 0;
 
   return (
-    <div className="min-h-svh">
-      <header className="border-b border-hairline">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Logo />
-          <LogoutButton />
-        </div>
-      </header>
+    <div className="mx-auto max-w-5xl">
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatTile
+          label="Seats used"
+          value={`${me.seats_used} / ${me.seats}`}
+          hint={seatsLeft === 0 ? "No seats free" : `${seatsLeft} free`}
+          icon="Users"
+          tone={seatsLeft === 0 ? "warn" : "neutral"}
+        />
+        <StatTile
+          label="Licence"
+          value={entitled ? "Active" : "Trial"}
+          hint={entitled ? "Entitled" : "Free to evaluate"}
+          icon="BadgeCheck"
+          tone={entitled ? "ok" : "neutral"}
+        />
+        <StatTile
+          label="Runs this month"
+          value={runs.toLocaleString("en-US")}
+          hint="Gate and test runs uploaded"
+          icon="Activity"
+          tone="neutral"
+        />
+        <StatTile
+          label="Your role"
+          value={me.role ?? "—"}
+          hint="Decides what you may see"
+          icon="ShieldCheck"
+          tone="accent"
+        />
+      </section>
 
-      <div className="mx-auto max-w-6xl px-6 py-12">
-        <p className="kicker">Organisation</p>
-        <h1 className="mt-3 text-3xl font-medium tracking-[-0.024em] text-ink">
-          {data.name}
-        </h1>
+      {/* A new organisation has no runs. Guidance beats an empty chart. */}
+      {runs === 0 && (
+        <section className="mt-6 rounded-xl border border-hairline bg-paper p-6">
+          <h2 className="text-[15px] font-medium text-ink">
+            Get the engine running
+          </h2>
+          <p className="mt-1.5 max-w-xl text-[13.5px] leading-relaxed text-ink-secondary">
+            Ivren routes clinical messages where the messages are — on your
+            own machines. This console is how you run the relationship
+            around it: seats, licensing and evidence.
+          </p>
 
-        <dl className="mt-8 grid gap-px overflow-hidden rounded-xl border border-hairline bg-hairline sm:grid-cols-3">
-          {[
-            ["Seats used", `${data.seats_used} of ${data.seats}`],
-            ["Your role", data.role ?? "—"],
-            ["Organisation ID", data.id],
-          ].map(([label, value]) => (
-            <div key={label} className="min-w-0 bg-canvas p-5">
-              <dt className="font-mono text-[10.5px] tracking-[0.14em] text-ink-label uppercase">
-                {label}
-              </dt>
-              <dd className="mt-2 truncate font-mono text-sm text-ink">
-                {value}
-              </dd>
-            </div>
-          ))}
-        </dl>
-
-        <h2 className="mt-12 text-xl font-medium text-ink">
-          Available to you
-        </h2>
-        {sections.length ? (
-          <ul className="mt-5 flex flex-wrap gap-2">
-            {sections.map((s: string) => (
+          <ol className="mt-6 space-y-3">
+            {[
+              {
+                Icon: Download,
+                title: "Download the engine",
+                body: "One executable for Windows. It runs offline and never phones home.",
+                href: "/download",
+                cta: "Download",
+              },
+              {
+                Icon: KeyRound,
+                title: "Create an API key",
+                body: "Named at creation, for CI and integrations. Engine installs get their own credential.",
+                href: "/dashboard/keys",
+                cta: "Settings",
+              },
+              {
+                Icon: ShieldCheck,
+                title: "Gate your first change",
+                body: "ivren gate returns 0 PASS, 1 FAIL, 3 INDETERMINATE — missing evidence never becomes a pass.",
+                href: "/docs/cli-reference",
+                cta: "CLI reference",
+              },
+            ].map((step, i) => (
               <li
-                key={s}
-                className="rounded-full border border-hairline bg-surface px-3 py-1.5 font-mono text-xs text-ink-secondary"
+                key={step.title}
+                className="flex gap-4 border-t border-hairline-soft pt-3 first:border-t-0 first:pt-0"
               >
-                {s}
+                <span className="mt-0.5 font-mono text-[11px] text-ink-label">
+                  0{i + 1}
+                </span>
+                <step.Icon className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[13.5px] font-medium text-ink">
+                    {step.title}
+                  </p>
+                  <p className="mt-0.5 text-[13px] leading-relaxed text-ink-secondary">
+                    {step.body}
+                  </p>
+                </div>
+                <Link
+                  href={step.href}
+                  className="shrink-0 self-center text-[13px] text-accent hover:text-accent-strong"
+                >
+                  {step.cta}
+                </Link>
               </li>
             ))}
-          </ul>
-        ) : (
-          <p className="mt-4 max-w-lg text-sm leading-relaxed text-ink-secondary">
-            This credential has no sections assigned. An administrator in
-            your organisation can grant them.
-          </p>
-        )}
+          </ol>
+        </section>
+      )}
 
-        <p className="mt-12 border-t border-hairline pt-6 text-sm text-ink-secondary">
-          Prefer to run it locally?{" "}
-          <Link
-            href="/download"
-            className="text-accent hover:text-accent-strong"
-          >
-            Download the engine
-          </Link>{" "}
-          and activate it with your API key.
-        </p>
-      </div>
+      <p className="mt-6 rounded-xl border border-hairline bg-paper px-5 py-4 text-[12.5px] leading-relaxed text-ink-secondary">
+        Your estate configuration is processed, never stored. This console
+        has no storage that could hold it —{" "}
+        <Link href="/security" className="text-accent hover:text-accent-strong">
+          read the boundary
+        </Link>
+        .
+      </p>
     </div>
   );
 }

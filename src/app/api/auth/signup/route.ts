@@ -65,19 +65,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: message }, { status: status ?? 502 });
   }
 
-  // Sign them straight in so the next screen is the product, not a login
-  // form asking for credentials they set ten seconds ago.
-  const orgId = (data as { org?: { id?: string } }).org?.id;
-  if (orgId) {
-    const { data: session } = await controlPlane.POST("/auth/login", {
+  // Signup signs you in. The control plane is moving to returning a session
+  // directly; until that deploy lands it still returns a birth key, so fall
+  // back to an explicit login. Either way the browser gets a cookie, never a
+  // credential, and the deprecated api_key is dropped here rather than
+  // travelling to the client.
+  const created = data as {
+    org?: { id?: string };
+    session?: { token?: string; expires_at?: string };
+  };
+
+  let session = created.session;
+  if (!session?.token && created.org?.id) {
+    const { data: logged } = await controlPlane.POST("/auth/login", {
       body: {
-        org_id: orgId,
+        org_id: created.org.id,
         email: parsed.data.admin_email,
         password: parsed.data.admin_password,
       },
     });
-    if (session?.token) await setSession(session.token, session.expires_at);
+    session = logged ?? undefined;
   }
 
-  return NextResponse.json(data, { status: 201 });
+  if (session?.token) await setSession(session.token, session.expires_at);
+
+  return NextResponse.json({ org: created.org }, { status: 201 });
 }
