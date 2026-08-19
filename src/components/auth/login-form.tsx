@@ -7,6 +7,10 @@ import { Field, FormError, SubmitButton } from "@/components/auth/field";
 export function LoginForm() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Temporary: the control plane still requires org_id on login. It is an
+  // internal lookup detail, not a credential, and is being dropped — when
+  // that lands, delete this disclosure and the field with it.
+  const [showOrg, setShowOrg] = useState(false);
   const router = useRouter();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -34,14 +38,6 @@ export function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-5" noValidate>
       <Field
-        id="org_id"
-        label="Organisation ID"
-        required
-        maxLength={64}
-        placeholder="org_…"
-        hint="Issued when your organisation was created."
-      />
-      <Field
         id="email"
         label="Work email"
         type="email"
@@ -59,11 +55,30 @@ export function LoginForm() {
         autoComplete="current-password"
       />
 
+      {showOrg && (
+        <Field
+          id="org_id"
+          label="Organisation ID"
+          maxLength={64}
+          placeholder="Only if you have been asked for it"
+        />
+      )}
+
       <FormError message={error} />
 
       <SubmitButton pending={pending} pendingLabel="Signing in…">
         Sign in
       </SubmitButton>
+
+      {!showOrg && (
+        <button
+          type="button"
+          onClick={() => setShowOrg(true)}
+          className="w-full text-center text-xs text-ink-label transition-colors hover:text-ink-secondary"
+        >
+          Sign in with an organisation ID
+        </button>
+      )}
     </form>
   );
 }

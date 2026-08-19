@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { z } from "zod";
 import { controlPlane } from "@/lib/control-plane";
 import { setSession } from "@/lib/session";
@@ -88,6 +89,18 @@ export async function POST(request: Request) {
   }
 
   if (session?.token) await setSession(session.token, session.expires_at);
+
+  // Remember the tenant so the next sign-in needs only email and password.
+  if (created.org?.id) {
+    const jar = await cookies();
+    jar.set("ivren_org", created.org.id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+  }
 
   return NextResponse.json({ org: created.org }, { status: 201 });
 }
