@@ -3,5 +3,9 @@ export default function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <main id="main">{children}</main>;
+  return (
+    <main id="main" className="app-surface">
+      {children}
+    </main>
+  );
 }

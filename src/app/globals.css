@@ -504,3 +504,21 @@ h4 {
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
+
+/* ----------------------------------------------------------------------
+ * Dashboard surface.
+ *
+ * Geist, matching the installed console, so the hosted dashboard and the
+ * desktop app read as the same product. Scoped to this class rather than
+ * set globally — the marketing site keeps Inter.
+ * -------------------------------------------------------------------- */
+.app-surface {
+  font-family: var(--font-geist), system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+}
+
+.app-surface code,
+.app-surface pre,
+.app-surface .font-mono {
+  font-family: var(--font-geist-mono), ui-monospace, "Cascadia Mono", monospace;
+}
