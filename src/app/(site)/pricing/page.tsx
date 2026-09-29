@@ -123,6 +123,13 @@ export default async function PricingPage() {
   // Rendered from the control plane's catalogue. If it cannot be reached the
   // page says so and offers a quote — it never falls back to typed-in prices.
   const plans = await getPlans();
+  // Every paid plan includes the AI layer (owner decision, 2026-09-29). It
+  // joins this list once the catalogue says so for every plan, so the page
+  // never claims more than the AI gate, which reads the same flag, enforces.
+  const paid =
+    plans && plans.length > 0 && plans.every((p) => p.ai_layer)
+      ? ["The AI layer: explain and ask", ...PAID]
+      : PAID;
 
   return (
     <>
@@ -234,7 +241,7 @@ export default async function PricingPage() {
               A paid plan adds
             </h2>
             <ul className="mt-6 divide-y divide-hairline-soft border-t border-hairline">
-              {PAID.map((f) => (
+              {paid.map((f) => (
                 <li key={f} className="flex gap-2.5 py-3.5 text-sm">
                   <Tick />
                   <span className="text-ink-secondary">{f}</span>
