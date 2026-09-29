@@ -4,41 +4,38 @@ import { PageHero } from "@/components/page-hero";
 import { Button } from "@/components/button";
 import { company } from "@/lib/company";
 import { pageMetadata } from "@/lib/seo";
-
-const requestHref = `mailto:${company.email}?subject=${encodeURIComponent(
-  `Ivren ${company.version} installer request`,
-)}`;
+import { artifactHref, artifacts, installerRequestHref } from "@/lib/releases";
 
 export const metadata: Metadata = pageMetadata({
   title: "Download",
   path: "/download",
   description:
-    "Download Ivren for Windows 10 or 11 — a guided installer or a ~15 MB portable executable. No cloud requirement, and it runs fully offline.",
+    "Download Ivren for Windows 10 or 11 — the desktop app, console and engine in one, as a per-user installer or an MSI for managed deployment. No cloud requirement; it runs fully offline.",
 });
+
+const code = (s: string) => (
+  <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-[0.9em]">
+    {s}
+  </code>
+);
 
 const STEPS = [
   {
     title: "Download",
     body: (
       <>
-        <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-[0.9em]">
-          ivren-setup.exe
-        </code>{" "}
-        (Windows 10/11, x64, ~17 MB) — or the portable{" "}
-        <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-[0.9em]">
-          ivren.exe
-        </code>{" "}
-        (~15 MB, no install).
+        {code(artifacts[0].file)} for a single machine, or the{" "}
+        {code(artifacts[1].file)} to deploy across a fleet.
       </>
     ),
   },
   {
-    title: "Run it",
-    body: "A guided installer; or double-click the portable exe.",
+    title: "Install",
+    body: "The installer sets Ivren up for the signed-in user and needs no administrator rights. IT can push the MSI through its usual deployment tooling instead.",
   },
   {
-    title: "Open Ivren",
-    body: "It opens in its own window. Click Explore with sample data — the full product on bundled synthetic interfaces, no file needed. Or drop your own configuration exports; the console explains exactly how to export them from each supported engine.",
+    title: "Map the estate",
+    body: "The free tier maps and analyses your whole estate with no account and no network. To run the engine, activate the machine with your organisation's licence key — offline machines use a request file at ivren.io/activate.",
   },
 ];
 
@@ -48,21 +45,29 @@ const FACTS = [
   "The optional AI features are the only thing that ever needs a network, are off by default, and require explicit configuration. See Security.",
 ];
 
+const REQUIREMENTS = [
+  "Windows 10 or 11, x64",
+  "The Microsoft Edge WebView2 runtime. It is part of Windows 11; on Windows 10 the installer adds it if it is missing, which needs a connection once — deploy WebView2 first on an air-gapped Windows 10 machine",
+  "No administrator rights for the per-user installer",
+];
+
 export default function DownloadPage() {
+  const primary = artifactHref(artifacts[0].file);
+
   return (
     <>
       <PageHero
         eyebrow="Download"
-        title="Download, run, and open Ivren."
-        intro="No cloud requirement. Nothing is uploaded. The engine never phones home."
+        title="Download, install, and open Ivren."
+        intro="The desktop app is the console and the engine in one. No cloud requirement. Nothing is uploaded. The engine never phones home."
       >
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
           <Button
-            href={company.downloadUrl || requestHref}
-            external={!company.downloadUrl}
+            href={primary ?? installerRequestHref}
+            external={!primary}
             className="w-full sm:w-auto"
           >
-            {company.downloadUrl
+            {primary
               ? `Download for Windows — v${company.version}`
               : `Request the v${company.version} installer`}
           </Button>
@@ -102,35 +107,39 @@ export default function DownloadPage() {
               <tr className="border-b border-hairline text-ink-label">
                 <th className="py-2.5 pr-4 font-medium">Version</th>
                 <th className="py-2.5 pr-4 font-medium">File</th>
-                <th className="py-2.5 pr-4 font-medium">Size</th>
+                <th className="py-2.5 pr-4 font-medium">For</th>
                 <th className="py-2.5 font-medium">SHA-256</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-hairline-soft">
-              <tr>
-                <td className="py-3 pr-4 font-mono text-ink">
-                  {company.version}
-                </td>
-                <td className="py-3 pr-4 font-mono text-ink-secondary">
-                  ivren-setup.exe
-                </td>
-                <td className="py-3 pr-4 text-ink-secondary">~17 MB</td>
-                <td className="py-3 text-xs text-ink-label">
-                  published with the release
-                </td>
-              </tr>
-              <tr>
-                <td className="py-3 pr-4 font-mono text-ink">
-                  {company.version}
-                </td>
-                <td className="py-3 pr-4 font-mono text-ink-secondary">
-                  ivren.exe (portable)
-                </td>
-                <td className="py-3 pr-4 text-ink-secondary">~15 MB</td>
-                <td className="py-3 text-xs text-ink-label">
-                  published with the release
-                </td>
-              </tr>
+              {artifacts.map((a) => {
+                const href = artifactHref(a.file);
+                return (
+                  <tr key={a.file}>
+                    <td className="py-3 pr-4 font-mono text-ink">
+                      {company.version}
+                    </td>
+                    <td className="py-3 pr-4 font-mono text-ink-secondary">
+                      {href ? (
+                        <a
+                          href={href}
+                          className="text-accent hover:text-accent-strong"
+                        >
+                          {a.file}
+                        </a>
+                      ) : (
+                        a.file
+                      )}
+                    </td>
+                    <td className="py-3 pr-4 text-ink-secondary">
+                      {a.detail}
+                    </td>
+                    <td className="py-3 text-xs text-ink-label">
+                      published with the release
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -161,11 +170,7 @@ export default function DownloadPage() {
               System requirements
             </h2>
             <ul className="mt-4 space-y-3">
-              {[
-                "Windows 10/11, x64",
-                "~100 MB disk",
-                "No admin rights required for portable use",
-              ].map((f) => (
+              {REQUIREMENTS.map((f) => (
                 <li
                   key={f}
                   className="border-t border-hairline-soft pt-3 text-sm leading-relaxed text-ink-secondary"

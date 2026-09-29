@@ -13,9 +13,10 @@ export const company = {
   location: "Texas, United States",
   version: "1.7",
   /**
-   * Public URL of the release artifacts. Leave empty until real signed
-   * builds are published — the Download page falls back to a request
-   * link rather than rendering a dead button.
+   * Base URL the signed release artifacts are published under; each file is
+   * served at `${downloadUrl}/${file}` (see lib/releases). Leave empty until
+   * real signed builds are published — the download screens fall back to a
+   * request link rather than rendering a dead button.
    */
   downloadUrl: "",
 } as const;

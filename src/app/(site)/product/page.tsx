@@ -18,7 +18,7 @@ export default function ProductPage() {
       <PageHero
         eyebrow="Product"
         title="Map the estate, prove every change, run interfaces that don’t drop messages."
-        intro="Ivren routes clinical messages like any interface engine — and unlike any of them, records what it carried and what a change would break. Everything below ships in the one executable you download."
+        intro="Ivren routes clinical messages like any interface engine — and unlike any of them, records what it carried and what a change would break. Everything below ships in the one desktop app you download."
       />
 
       {featureGroups.map((group) => (

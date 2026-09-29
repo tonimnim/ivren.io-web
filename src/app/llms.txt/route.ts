@@ -16,7 +16,7 @@ Ivren is an interface engine, not a layer over one. It listens on MLLP, HTTP and
 
 It also imports the configuration of an incumbent engine. That is a migration on-ramp — how a hospital leaves the engine it runs today — not what Ivren is.
 
-Ivren is a single executable (~15 MB) for Windows 10/11 x64. It requires no cloud service and no internet connection to run; an ivren.io organisation issues the licence key, but the engine never calls home. It serves a local web console bound to 127.0.0.1 only. Version ${company.version}.
+Ivren is a desktop app for Windows 10/11 x64 — the console and the engine in one. It requires no cloud service and no internet connection to run; an ivren.io organisation issues the licence key, but the engine never calls home. It serves a local web console bound to 127.0.0.1 only. Version ${company.version}.
 
 Ivren is not an EHR, not a clinical application, and not a medical device. Clinicians do not use it. Its users are hospital IT and integration teams, and revenue-cycle, compliance, and health-information-management staff.
 

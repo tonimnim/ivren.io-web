@@ -281,9 +281,9 @@ export default function Home() {
               Download Ivren.
             </h2>
             <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-secondary">
-              One ~15 MB executable for Windows. Never phones home. No internet
-              required. Evaluate on the Trial tier, or explore with sample
-              data first.
+              The desktop app for Windows. Never phones home. No internet
+              required. The free tier maps the whole estate, with no account
+              and no time limit.
             </p>
           </div>
           <Button href="/download" className="shrink-0">

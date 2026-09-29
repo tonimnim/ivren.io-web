@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { artifacts } from "@/lib/releases";
 
 export const metadata: Metadata = { title: "Quick start" };
 
@@ -10,16 +11,17 @@ export default function QuickStartPage() {
 
       <h2 id="download">Download</h2>
       <p>
-        Get <code>ivren-setup.exe</code> (Windows 10/11, x64, ~17 MB) for a
-        guided install, or the portable <code>ivren.exe</code> (~15 MB, no
-        install) from the{" "}
-        <a href="/download">Download page</a>.
+        Get the desktop app for Windows 10/11 (x64) from the{" "}
+        <a href="/download">Download page</a>:{" "}
+        <code>{artifacts[0].file}</code> for a single machine, or the MSI to
+        deploy across a fleet.
       </p>
 
-      <h2 id="run">Run it</h2>
+      <h2 id="run">Install it</h2>
       <p>
-        Run the guided installer, or double-click the portable executable.
-        No admin rights are required for portable use.
+        The installer sets Ivren up for the signed-in user and needs no
+        administrator rights. IT can push the MSI through its usual
+        deployment tooling instead.
       </p>
 
       <h2 id="open">Open Ivren</h2>

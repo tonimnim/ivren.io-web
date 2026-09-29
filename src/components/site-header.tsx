@@ -191,8 +191,8 @@ export function SiteHeader() {
                               Download Ivren
                             </span>
                             <span className="mt-0.5 block text-xs leading-relaxed text-ink-secondary">
-                              One ~15 MB executable. Runs offline, never
-                              phones home.
+                              The desktop app for Windows. Runs offline,
+                              never phones home.
                             </span>
                           </Link>
                           {[
