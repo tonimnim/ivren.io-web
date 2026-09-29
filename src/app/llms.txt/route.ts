@@ -41,7 +41,7 @@ Nothing is uploaded. There is no telemetry and no phone-home. Files are read in 
 
 ## Licensing
 
-Trial is free with no time pressure. Professional and Enterprise are licensed per seat or per site, billed monthly or yearly. Licences are signed keys verified locally; activation works fully air-gapped. An expired licence never blocks activation, help, or uninstall.
+The free tier maps and analyses the whole estate — offline, with no account and no time limit. Paid plans run the engine and are priced per site, per year: Pilot for a single hospital, Network for hospital groups, Enterprise for health systems; current prices are at https://ivren.io/pricing. Licences are signed keys verified locally; activation works fully air-gapped, with a request file brought to https://ivren.io/activate from any connected computer. An expired licence falls back to the free tier and never blocks activation, help, or uninstall.
 
 ## Contact
 

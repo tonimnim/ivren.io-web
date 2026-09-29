@@ -188,7 +188,7 @@ export const softwareSchema = {
     price: "0",
     priceCurrency: "USD",
     description:
-      "Free Trial tier — the full product, no time limit. Professional and Enterprise licensing available.",
+      "Free tier — map and analyse the whole estate, offline, with no time limit. Paid plans run the engine, priced per site per year.",
   },
 };
 

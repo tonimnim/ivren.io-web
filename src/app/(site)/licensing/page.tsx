@@ -67,24 +67,30 @@ export default function LicensingPage() {
         <Block title="The model">
           <ul className="list-disc space-y-3 pl-5">
             <li>
-              Three tiers — Trial, Professional, Enterprise — billed
-              monthly or yearly. A license is a signed key (Ed25519),
-              verified locally by the product; nothing about licensing
-              requires it to be online.
+              Free to map and analyse the whole estate, with no license.
+              Paid plans — Pilot, Network and Enterprise — run the engine
+              and are priced per site, per year; see{" "}
+              <a href="/pricing" className="text-accent hover:text-accent-strong">
+                Pricing
+              </a>
+              . A license is a signed key (Ed25519), verified locally by the
+              product; nothing about licensing requires it to be online.
             </li>
             <li>
-              Seat licenses bind to a machine via a privacy-preserving
-              fingerprint — hashed hardware signals. The license server
-              never learns hostnames or MAC addresses. A swapped network
-              card does not cost a seat (threshold matching). Site
-              licenses exist with no machine binding, for fleet installs.
+              Each activated machine holds one license seat, bound by a
+              privacy-preserving fingerprint — a hash of a few ordinary
+              machine signals. The license server never learns hostnames or
+              MAC addresses.
             </li>
             <li>
-              Online activation: enter the key, done. Air-gapped
-              activation: generate an activation request (armored text,
-              safe to print or carry on USB), paste it at a connected
-              machine or send it to us, paste the signed license back.
-              Line-wrapping by email clients cannot break it.
+              Activation is offline in both directions: the product writes an
+              activation request (armored text, safe to print or carry on
+              USB); bring it to{" "}
+              <a href="/activate" className="text-accent hover:text-accent-strong">
+                ivren.io/activate
+              </a>{" "}
+              from any connected machine or send it to us, and load the signed
+              license back. Line-wrapping by email clients cannot break it.
             </li>
             <li>
               An activated install re-checks weekly when it can. If the
@@ -104,8 +110,8 @@ export default function LicensingPage() {
         <Block title="The purchase path — hospitals buy by PO">
           <ol className="list-decimal space-y-3 pl-5">
             <li>
-              Request a quote — organization, contact, tier, seat count,
-              billing period — to{" "}
+              Request a quote — organization, contact, plan and number of
+              sites — to{" "}
               <a
                 href={`mailto:${company.email}`}
                 className="text-accent hover:text-accent-strong"

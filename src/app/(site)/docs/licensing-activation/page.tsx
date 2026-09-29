@@ -7,13 +7,15 @@ export default function LicensingActivationPage() {
     <div>
       <h1>Licensing & activation</h1>
       <p>
-        Three tiers — Trial, Professional, Enterprise — billed monthly or
-        yearly. See <a href="/licensing">How licensing & billing works</a>{" "}
-        for the full purchase path.
+        Free to map and analyse the whole estate, with no licence at all.
+        Paid plans run the engine and are priced per site, per year — see{" "}
+        <a href="/pricing">Pricing</a>, and{" "}
+        <a href="/licensing">How licensing & billing works</a> for the full
+        purchase path.
       </p>
 
-      <h2 id="online">Online activation</h2>
-      <p>Enter the license key. Done. A license is a signed key (Ed25519), verified locally by the product.</p>
+      <h2 id="online">The licence</h2>
+      <p>A licence is a signed key (Ed25519), verified locally by the product. Activation is offline in both directions: nothing about it requires the machine to be online.</p>
 
       <h2 id="air-gapped">Air-gapped activation</h2>
       <ol>
@@ -22,9 +24,10 @@ export default function LicensingActivationPage() {
           to print or carry on USB.
         </li>
         <li>
-          Paste it at a connected machine, or send it to us.
+          Bring it to <a href="/activate">ivren.io/activate</a> from any
+          connected machine, or send it to us.
         </li>
-        <li>Paste the signed license back into Ivren.</li>
+        <li>Load the signed licence back into Ivren.</li>
       </ol>
       <p>
         Line-wrapping by email clients cannot break the request — it&rsquo;s

@@ -11,8 +11,8 @@ export default function RefundPage() {
       draftNote="Draft — pending legal review."
     >
       <p>
-        Evaluation happens on the Trial tier before any purchase, so paid
-        licenses are entered into deliberately. If a purchase was made in
+        The free tier maps and analyses the whole estate before any
+        purchase, so paid plans are entered into deliberately. If a purchase was made in
         error, contact us and we will work it out.
       </p>
       <p>
