@@ -173,7 +173,7 @@ export default async function BillingPage() {
               }
             />
             <StatTile
-              label={sites !== null ? "Sites" : "People included"}
+              label={sites !== null ? "Sites" : "Machines included"}
               value={
                 sites !== null
                   ? String(sites)
@@ -221,7 +221,7 @@ export default async function BillingPage() {
                   <TableHead>Plan</TableHead>
                   <TableHead>Sites</TableHead>
                   <TableHead className="text-right">Per site, per year</TableHead>
-                  <TableHead className="text-right">People per site</TableHead>
+                  <TableHead className="text-right">Machines per site</TableHead>
                   <TableHead>AI layer</TableHead>
                 </TableRow>
               </TableHeader>

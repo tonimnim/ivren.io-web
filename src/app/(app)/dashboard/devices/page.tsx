@@ -61,13 +61,13 @@ export default async function DevicesPage() {
       {licence.kind === "entitled" && (
         <section className="mb-6 grid gap-4 sm:grid-cols-3">
           <StatTile
-            label="Machines activated"
+            label="Machines"
             value={
               licence.seats === null || licence.seatsInUse === null
                 ? "—"
                 : `${licence.seatsInUse} / ${licence.seats}`
             }
-            hint="Each holds one licence seat"
+            hint="Used / included by your plan"
             icon="Monitor"
           />
           <StatTile
@@ -122,7 +122,7 @@ export default async function DevicesPage() {
           <Notice title="The machine list isn't available yet">
             Each machine&apos;s name, site, version and last check-in arrive
             with the device registry, along with removing a machine. Until
-            then, machines activated above is the count.
+            then, the count above is how many machines are activated.
           </Notice>
         </div>
       </div>

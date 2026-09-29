@@ -22,15 +22,40 @@ async function safeGet<T>(fn: () => Promise<T>): Promise<T | null> {
 /** The holders of billing.read. */
 const BILLING_ROLES = ["owner", "admin", "revenue"];
 
+/** Machines used against what the plan includes: the one limit a plan sets. */
+function machinesTile(licence: LicenceState) {
+  if (
+    licence.kind === "entitled" &&
+    licence.seats !== null &&
+    licence.seatsInUse !== null
+  ) {
+    const full = licence.seatsInUse >= licence.seats;
+    return {
+      value: `${licence.seatsInUse} / ${licence.seats}`,
+      hint: full ? "Every included machine is in use" : "Used / included by your plan",
+      tone: full ? ("warn" as const) : ("neutral" as const),
+    };
+  }
+  return {
+    value: "—",
+    hint:
+      licence.kind === "none"
+        ? "Counted once a paid plan is active"
+        : licence.kind === "unavailable"
+          ? "Licensing is down on our side"
+          : licence.kind === "refused"
+            ? "Not part of your role"
+            : "Not reported by the licence",
+    tone: "neutral" as const,
+  };
+}
+
 function licenceTile(licence: LicenceState) {
   switch (licence.kind) {
     case "entitled":
       return {
         value: "Paid",
-        hint:
-          licence.seats !== null
-            ? `${licence.seats} machine seats`
-            : "Paid plan active",
+        hint: "Paid plan active",
         tone: "ok" as const,
       };
     case "none":
@@ -69,9 +94,9 @@ export default async function OverviewPage() {
     }),
   ]);
 
-  const seatsLeft = Math.max(0, me.seats - me.seats_used);
   const runs = usage?.runs ?? 0;
   const tile = licenceTile(licence);
+  const machines = machinesTile(licence);
   const entitled = licence.kind === "entitled" ? licence : null;
 
   // Each step is ticked only when data proves it. A step nothing can detect —
@@ -110,7 +135,7 @@ export default async function OverviewPage() {
       body: "Everyone gets their own account. Nobody shares a sign-in.",
       href: "/dashboard/users",
       cta: "People",
-      done: me.seats_used > 1,
+      done: false,
     },
   ];
   const onboarding = !(steps[0].done && steps[2].done && steps[3].done);
@@ -124,11 +149,11 @@ export default async function OverviewPage() {
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatTile
-          label="People"
-          value={`${me.seats_used} / ${me.seats}`}
-          hint={seatsLeft === 0 ? "No seats free" : `${seatsLeft} free`}
-          icon="Users"
-          tone={seatsLeft === 0 ? "warn" : "neutral"}
+          label="Machines"
+          value={machines.value}
+          hint={machines.hint}
+          icon="Monitor"
+          tone={machines.tone}
         />
         <StatTile
           label="Licence"

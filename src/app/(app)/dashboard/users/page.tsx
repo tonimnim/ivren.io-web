@@ -31,7 +31,6 @@ export default async function UsersPage() {
     headers: authHeader(token!),
   });
   const users = data ?? [];
-  const seatsLeft = Math.max(0, me.seats - me.seats_used);
   const mayManage = MANAGER_ROLES.includes(me.role ?? "");
 
   return (
@@ -39,17 +38,6 @@ export default async function UsersPage() {
       <PageHeader
         title="People"
         description="Who may act on this organisation, and what each of them may do."
-        action={
-          <div className="rounded-lg border border-hairline bg-paper px-3.5 py-2 text-right">
-            <p className="font-tabular text-[15px] font-medium text-ink">
-              {me.seats_used}
-              <span className="text-ink-label">/{me.seats}</span>
-            </p>
-            <p className="text-[11.5px] text-ink-label">
-              {seatsLeft === 0 ? "no seats free" : `${seatsLeft} seats free`}
-            </p>
-          </div>
-        }
       />
 
       <div className="overflow-hidden rounded-xl border border-hairline bg-paper">
@@ -61,7 +49,7 @@ export default async function UsersPage() {
         ) : users.length === 0 ? (
           <EmptyState
             title="Nobody here yet"
-            body="Each person gets their own account, one per seat. Nobody shares a sign-in."
+            body="Each person gets their own account. Nobody shares a sign-in."
           />
         ) : (
           <div className="overflow-x-auto">

@@ -165,7 +165,7 @@ export default async function PricingPage() {
                 priceNote="per site, per year"
                 details={[
                   siteBand(plan),
-                  `${plan.seats_per_site} people per site`,
+                  `${plan.seats_per_site} machines per site`,
                   plan.ai_layer
                     ? "The AI layer: explain and ask"
                     : "The AI layer is not included",
