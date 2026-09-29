@@ -22,7 +22,7 @@ Ivren is not an EHR, not a clinical application, and not a medical device. Clini
 
 ## Wire formats supported
 
-HL7 v2 (multiple versions, with an embedded data dictionary), FHIR R4, DICOM metadata and worklists, X12 claims envelopes, NCPDP pharmacy claims, and HL7 batch files (FHS/BHS). Transports: MLLP, HTTP, SFTP, and file. Database-to-database connector modelling is included.
+HL7 v2 (multiple versions, with an embedded data dictionary), FHIR R4, DICOM metadata and worklists, X12 claims envelopes, NCPDP pharmacy claims, and HL7 batch files (FHS/BHS). Transports performed by this build: MLLP, HTTP and file in both directions, and HTTPS for delivery. SFTP, STOMP and SOAP drivers are built and a route may declare them, but this build dispatches to none of the three; ivren transports publishes the declarable set and the performed set as separate columns. Database-to-database connector modelling is included.
 
 ## Core capabilities
 

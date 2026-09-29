@@ -41,9 +41,14 @@ export default function SecurityArchitecturePage() {
       <h2 id="audit">Audit</h2>
       <p>
         Hash-chained, append-only audit logging with tamper detection,
-        behind a closed role set (admin, engineer, operator, revenue,
-        auditor) enforced server-side. Every sensitive view and change is
-        recorded.
+        behind a closed role set — owner, admin, engineer, operator,
+        revenue and auditor — enforced server-side. Every sensitive view
+        and change is recorded. The engine&apos;s local console compiles
+        five of those six: revenue is a control-plane role, and minting it
+        over the engine vocabulary would hand revenue-cycle staff
+        operational sight of the interfaces in order to give them a role
+        name they already hold upstream. A session carrying only that
+        group resolves to no role and is refused.
       </p>
     </div>
   );

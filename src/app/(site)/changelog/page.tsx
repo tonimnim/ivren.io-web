@@ -48,7 +48,7 @@ const RELEASES: Release[] = [
         heading: "Formats and transport",
         items: [
           "HL7 v2 across multiple versions with an embedded data dictionary, FHIR R4, DICOM metadata and worklists, X12 claims envelopes, NCPDP pharmacy claims, and HL7 batch files (FHS/BHS).",
-          "MLLP, HTTP, SFTP and file transports, plus database-to-database connector modelling.",
+          "MLLP, HTTP and file transports in both directions, HTTPS for delivery, plus database-to-database connector modelling. ivren transports publishes what a route may declare against what this build performs.",
           "DICOM pixel data is structurally never stored.",
         ],
       },

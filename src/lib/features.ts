@@ -58,7 +58,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         name: "Wire-format depth",
         description:
-          "Parsers and conformance machinery for HL7 v2 (multiple versions), FHIR R4, DICOM metadata and worklists (pixel data is structurally never stored), X12 claims envelopes, NCPDP pharmacy claims, and HL7 batch files (FHS/BHS), plus database-to-database connector modeling and SFTP/MLLP/HTTP transports.",
+          "Parsers and conformance machinery for HL7 v2 (multiple versions), FHIR R4, DICOM metadata and worklists (pixel data is structurally never stored), X12 claims envelopes, NCPDP pharmacy claims, and HL7 batch files (FHS/BHS), plus database-to-database connector modeling. The transports this build performs are MLLP, HTTP and file in both directions, and HTTPS for delivery.",
       },
     ],
   },
@@ -71,7 +71,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         name: "The engine",
         description:
-          "MLLP, HTTP and file spool listeners inbound; filters and transforms through one durable, reviewed pipeline; fan-out over MLLP, HTTP, HTTPS and file. Behind it: fsync-before-ack queues, per-destination retry lanes with backoff, dead letters, replay and retention. SOAP with WS-Security and WS-Addressing, SFTP, mail and STOMP drivers ship alongside.",
+          "MLLP, HTTP and file spool listeners inbound; filters and transforms through one durable, reviewed pipeline; fan-out over MLLP, HTTP, HTTPS and file. Behind it: fsync-before-ack queues, per-destination retry lanes with backoff, dead letters, replay and retention. SOAP with WS-Security and WS-Addressing, SFTP, STOMP and mail are built and tested beside them. ivren transports publishes what a route may declare separately from what this build performs — those are different sets, and collapsing them is how an integration promise becomes an outage.",
       },
       {
         name: "Alert-on-silence",
@@ -114,7 +114,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         name: "Role-based access",
         description:
-          "A closed role set (admin, engineer, operator, revenue, auditor) with server-side enforcement and a hash-chained audit trail; every sensitive view and change recorded.",
+          "A closed role set — owner, admin, engineer, operator, revenue and auditor — with server-side enforcement and a hash-chained audit trail; every sensitive view and change recorded. The engine's local console compiles five of those six: revenue is a control-plane role, and a session carrying only that group resolves to no role and is refused.",
       },
     ],
   },
