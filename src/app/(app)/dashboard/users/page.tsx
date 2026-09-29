@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { PageHeader, EmptyState } from "@/components/app/page-header";
 import { RoleBadge } from "@/components/app/role-badge";
+import { RoleSelect } from "@/components/app/role-select";
+import { Notice } from "@/components/app/notice";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Table,
@@ -15,7 +17,10 @@ import { getSession } from "@/lib/session";
 import { getMe } from "@/lib/me";
 import { formatDate, initials } from "@/lib/format";
 
-export const metadata = { title: "Users", robots: { index: false } };
+export const metadata = { title: "People", robots: { index: false } };
+
+/** The holders of users.manage — the roles the API lets change a role. */
+const MANAGER_ROLES = ["owner", "admin"];
 
 export default async function UsersPage() {
   const me = await getMe();
@@ -27,11 +32,12 @@ export default async function UsersPage() {
   });
   const users = data ?? [];
   const seatsLeft = Math.max(0, me.seats - me.seats_used);
+  const mayManage = MANAGER_ROLES.includes(me.role ?? "");
 
   return (
     <>
       <PageHeader
-        title="Users"
+        title="People"
         description="Who may act on this organisation, and what each of them may do."
         action={
           <div className="rounded-lg border border-hairline bg-paper px-3.5 py-2 text-right">
@@ -54,8 +60,8 @@ export default async function UsersPage() {
           />
         ) : users.length === 0 ? (
           <EmptyState
-            title="No users yet"
-            body="Users are added by an owner or admin, one per seat."
+            title="Nobody here yet"
+            body="Each person gets their own account, one per seat. Nobody shares a sign-in."
           />
         ) : (
           <div className="overflow-x-auto">
@@ -90,7 +96,17 @@ export default async function UsersPage() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <RoleBadge role={u.role} />
+                      {/* Ownership is handed over, not picked, so an owner's
+                          row shows the role rather than offering to change it. */}
+                      {mayManage && u.role !== "owner" ? (
+                        <RoleSelect
+                          userId={u.id}
+                          role={u.role}
+                          name={u.display_name || u.email}
+                        />
+                      ) : (
+                        <RoleBadge role={u.role} />
+                      )}
                     </TableCell>
                     <TableCell className="text-right font-tabular text-[13px] text-ink-secondary">
                       {formatDate(u.created_at)}
@@ -102,6 +118,16 @@ export default async function UsersPage() {
           </div>
         )}
       </div>
+
+      {mayManage && (
+        <div className="mt-4">
+          <Notice title="Adding people arrives with email invitations">
+            Each person will accept an invitation on ivren.io and set their own
+            password, so nobody sets a password for somebody else. Role changes
+            above take effect at once and are recorded in the access log.
+          </Notice>
+        </div>
+      )}
     </>
   );
 }
