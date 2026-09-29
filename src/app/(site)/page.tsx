@@ -123,7 +123,7 @@ export default function Home() {
                 HL7 v2 · FHIR R4 · DICOM · X12 · NCPDP
               </span>
               <span className="text-white/40">
-                Runs offline · Never phones home · No telemetry
+                Runs offline · No telemetry · Never sends patient data
               </span>
             </div>
           </div>
@@ -281,9 +281,9 @@ export default function Home() {
               Download Ivren.
             </h2>
             <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-secondary">
-              The desktop app for Windows. Never phones home. No internet
-              required. The free tier maps the whole estate, with no account
-              and no time limit.
+              The desktop app for Windows. No internet required, and
+              air-gapped machines never contact us. The free tier maps the
+              whole estate, with no account and no time limit.
             </p>
           </div>
           <Button href="/download" className="shrink-0">

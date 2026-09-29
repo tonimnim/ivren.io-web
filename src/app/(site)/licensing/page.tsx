@@ -8,7 +8,7 @@ export const metadata: Metadata = pageMetadata({
   title: "How licensing & billing works",
   path: "/licensing",
   description:
-    "How Ivren licensing works: signed Ed25519 keys verified locally, privacy-preserving seat binding, fully air-gapped activation, a 14-day grace period, and purchase by PO.",
+    "How Ivren licensing works: signed Ed25519 keys verified locally, privacy-preserving machine binding, fully air-gapped activation, and purchase by PO.",
 });
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
@@ -35,8 +35,9 @@ const FAQS = [
     q: "Do licenses phone home?",
     a: (
       <>
-        A weekly check when online, with a 14-day grace period. Air-gapped
-        operation is fully supported — see{" "}
+        Air-gapped machines never contact us. Ivren connects to ivren.io
+        only when you activate online or use an AI feature, and it never
+        sends messages or patient data — see{" "}
         <a href="/security" className="text-accent hover:text-accent-strong">
           Security
         </a>
@@ -83,7 +84,7 @@ export default function LicensingPage() {
               MAC addresses.
             </li>
             <li>
-              Activation is offline in both directions: the product writes an
+              Activation also works fully offline: the product writes an
               activation request (armored text, safe to print or carry on
               USB); bring it to{" "}
               <a href="/activate" className="text-accent hover:text-accent-strong">
@@ -93,11 +94,11 @@ export default function LicensingPage() {
               license back. Line-wrapping by email clients cannot break it.
             </li>
             <li>
-              An activated install re-checks weekly when it can. If the
-              license server is unreachable, the product keeps working for
-              14 days and says so quietly; a never-connected air-gapped
-              install is simply licensed, full stop. An expired or
-              unlicensed install never locks the user out of{" "}
+              Air-gapped machines never contact us. Ivren connects to
+              ivren.io only when you activate online or use an AI feature,
+              and it never sends messages or patient data. An expired or
+              unlicensed install falls back to the free tier and never locks
+              the user out of{" "}
               <code>activate</code>, <code>help</code>, or uninstall.
             </li>
           </ul>

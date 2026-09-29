@@ -72,7 +72,7 @@ const RELEASES: Release[] = [
         items: [
           "Console binds to 127.0.0.1 only and makes no external network requests.",
           "Hash-chained, append-only audit logging with tamper detection behind server-side role-based access control.",
-          "Signed licences (Ed25519) verified locally, with fully air-gapped activation and a 14-day grace period when the licence server is unreachable.",
+          "Signed licences (Ed25519) verified locally, with fully air-gapped activation.",
           "An expired or unlicensed install never blocks activate, help, version, or uninstall.",
         ],
       },

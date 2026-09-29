@@ -86,7 +86,7 @@ export default async function OverviewPage() {
     },
     {
       title: "Download Ivren",
-      body: "The desktop app, console and engine in one. It runs offline and never phones home.",
+      body: "The desktop app, console and engine in one. It runs offline and never sends patient data.",
       href: "/dashboard/downloads",
       cta: "Downloads",
       done: false,

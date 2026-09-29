@@ -7,7 +7,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Security",
   path: "/security",
   description:
-    "How Ivren draws its data boundary: nothing is uploaded, there is no telemetry and no phone-home, credentials in imported exports are stripped, and optional AI features are gated so raw message content never leaves the machine.",
+    "How Ivren draws its data boundary: nothing is uploaded, there is no telemetry, air-gapped machines never contact us, credentials in imported exports are stripped, and optional AI features are gated so raw message content never leaves the machine.",
 });
 
 function Block({
@@ -42,8 +42,10 @@ export default function SecurityPage() {
         <Block title="The data boundary">
           <p>
             Ivren reads interface configuration and message structure on the
-            customer&rsquo;s machine. Nothing is uploaded; there is no
-            telemetry, no phone-home. The console states it
+            customer&rsquo;s machine. Nothing is uploaded and there is no
+            telemetry. Air-gapped machines never contact us; Ivren connects
+            to ivren.io only when you activate online or use an AI feature,
+            and it never sends messages or patient data. The console states it
             plainly: &ldquo;Nothing is uploaded. The files are read in this
             process, on this machine.&rdquo;
           </p>

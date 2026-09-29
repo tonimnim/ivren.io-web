@@ -15,7 +15,7 @@ export default function LicensingActivationPage() {
       </p>
 
       <h2 id="online">The licence</h2>
-      <p>A licence is a signed key (Ed25519), verified locally by the product. Activation is offline in both directions: nothing about it requires the machine to be online.</p>
+      <p>A licence is a signed key (Ed25519), verified locally by the product. Activation also works fully offline, in both directions: nothing about it requires the machine to be online.</p>
 
       <h2 id="air-gapped">Air-gapped activation</h2>
       <ol>
@@ -34,13 +34,11 @@ export default function LicensingActivationPage() {
         deliberately robust to that.
       </p>
 
-      <h2 id="grace">Grace period</h2>
+      <h2 id="connections">When Ivren connects</h2>
       <p>
-        An activated install re-checks weekly when it can. If the license
-        server is unreachable — a proxy change, firewall work — the
-        product keeps working for 14 days and says so quietly. A
-        never-connected air-gapped install is simply licensed, full stop,
-        no grace nagging.
+        Air-gapped machines never contact us. Ivren connects to ivren.io
+        only when you activate online or use an AI feature, and it never
+        sends messages or patient data.
       </p>
       <p>
         An expired or unlicensed install never locks the user out of{" "}

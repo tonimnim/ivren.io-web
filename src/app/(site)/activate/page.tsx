@@ -39,7 +39,7 @@ export default function ActivatePage() {
       <PageHero
         eyebrow="Activation"
         title="Activate a machine that never touches the internet."
-        intro="Activation is offline in both directions. The machine writes a request, you bring it here from any connected computer, and you take a licence back."
+        intro="This is activation without a connection. The machine writes a request, you bring it here from any connected computer, and you take a licence back."
       />
 
       <Section hairline={false} className="!pt-10 md:!pt-14">

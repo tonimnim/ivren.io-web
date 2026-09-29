@@ -49,7 +49,8 @@ export default function CompanyPage() {
             the source of truth. It routes the same messages every engine
             routes, and it can tell you what it carried, what changed, and
             what a change would break before it ships. It runs entirely on
-            your own machine: no upload, no telemetry, no phone-home. That
+            your own machine: no upload, no telemetry, and no patient data
+            ever leaves it. That
             last constraint is not a feature we added. It is the premise we
             started from.
           </p>

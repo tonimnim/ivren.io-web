@@ -40,9 +40,9 @@ const STEPS = [
 ];
 
 const FACTS = [
-  "Your licence key comes from your ivren.io organisation. The engine itself never calls us to run.",
-  "No internet connection required — the product is fully functional offline; the console is served locally at 127.0.0.1 and never binds a public interface.",
-  "The optional AI features are the only thing that ever needs a network, are off by default, and require explicit configuration. See Security.",
+  "Your licence key comes from your ivren.io organisation. The engine needs no connection to run.",
+  "No internet connection required — everything but the AI features works fully offline; the console is served locally at 127.0.0.1 and never binds a public interface.",
+  "Air-gapped machines never contact us. Ivren connects to ivren.io only when you activate online or use an AI feature, and it never sends messages or patient data.",
 ];
 
 const REQUIREMENTS = [
@@ -59,7 +59,7 @@ export default function DownloadPage() {
       <PageHero
         eyebrow="Download"
         title="Download, install, and open Ivren."
-        intro="The desktop app is the console and the engine in one. No cloud requirement. Nothing is uploaded. The engine never phones home."
+        intro="The desktop app is the console and the engine in one. No cloud requirement. Nothing is uploaded, and air-gapped machines never contact us."
       >
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
           <Button
