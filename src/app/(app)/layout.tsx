@@ -21,7 +21,7 @@ export default async function AppLayout({
   const me = await getMe();
   if (!me) redirect("/login");
 
-  const bands = visibleBands(me.sections ?? []);
+  const bands = visibleBands(me.sections ?? [], me.role ?? null);
   const seatsLeft = Math.max(0, me.seats - me.seats_used);
   const seatPct = me.seats > 0 ? (me.seats_used / me.seats) * 100 : 0;
 
