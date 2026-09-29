@@ -78,14 +78,17 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Exchange an org, email and password for a console session
+         * Exchange an email and password for a console session
          * @description The console's front door. Public, because a caller has nothing yet.
          *
-         *     The order below is load-bearing. Every lookup runs to completion and the
-         *     password is verified in *every* case — including the cases already lost —
-         *     before anything is refused, so the work this endpoint does does not depend
-         *     on how far the credential got. Returning early on a missing org would answer
-         *     a probe for "does this org exist" without touching a hash at all.
+         *     Email and password are the credential; the org is optional and only ever a
+         *     disambiguator. The order below is load-bearing: every candidate account
+         *     the address holds is verified — and where there is none, a throwaway
+         *     verification runs instead — before anything is refused, so an address
+         *     with no account costs what an address with one costs. What varies with
+         *     the *number* of accounts is work done after the password proved itself,
+         *     which is the boundary this handler defends: nothing about org membership
+         *     leaves it on any unverified path.
          */
         post: operations["login_auth_login_post"];
         delete?: never;
@@ -1661,11 +1664,28 @@ export interface components {
              */
             warning: string;
         };
-        /** CreatedOrgView */
+        /**
+         * CreatedOrgView
+         * @description What org creation returns, mid-migration and saying so.
+         *
+         *     ``session`` is the future: a person who just signed up is signed in, and a
+         *     credential should exist because a machine was named, not because an
+         *     account was born. It is present on the SIGNUP lane only — a session minted
+         *     on the provisioning lane would hand the vendor a logged-in session as the
+         *     customer's admin, which is an impersonation nobody asked for.
+         *
+         *     ``api_key`` is the past, kept for exactly one migration window because the
+         *     live signup flow still renders it; the field's description says so in the
+         *     contract, and its removal is scheduled with the web flow's rebuild. Do not
+         *     build anything new against it.
+         */
         CreatedOrgView: {
             org: components["schemas"]["OrgView"];
             admin: components["schemas"]["UserView"];
+            /** @description DEPRECATED: retained for one migration window while the signup flow rebuilds. Mint keys on demand via POST /auth/keys instead; a credential should exist because a machine was named. */
             api_key: components["schemas"]["CreatedKeyView"];
+            /** @description Signup lane only: the admin's live session, so the person who just created the organisation is already signed in. */
+            session?: components["schemas"]["SessionView"] | null;
         };
         /**
          * DataFlow
@@ -2120,8 +2140,11 @@ export interface components {
          *     wrong org is refused exactly as a wrong password is, with the same body.
          */
         LoginRequest: {
-            /** Org Id */
-            org_id: string;
+            /**
+             * Org Id
+             * @description Optional. The organisation's slug or its id, when disambiguating an address that opens more than one organisation.
+             */
+            org_id?: string | null;
             /** Email */
             email: string;
             /** Password */
@@ -2145,6 +2168,8 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+            /** Slug */
+            slug: string;
             /** Seats */
             seats: number;
             /** Seats Used */
@@ -2276,12 +2301,45 @@ export interface components {
             /** Reasons */
             reasons: unknown;
         };
+        /**
+         * OrgChoiceItem
+         * @description One organisation a verified password opens. Never rendered before then.
+         */
+        OrgChoiceItem: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+        };
+        /**
+         * OrgChoicesView
+         * @description The 409 body when one email and password open several organisations.
+         *
+         *     This response discloses org membership, and that is acceptable for exactly
+         *     one reason: it is only ever constructed *after* the password verified
+         *     against every listed account. An unauthenticated probe gets the uniform
+         *     401 and never this. The caller retries login with ``org_id`` set to one of
+         *     the choices.
+         */
+        OrgChoicesView: {
+            /**
+             * Detail
+             * @default this email and password open more than one organisation; sign in again naming one of them
+             */
+            detail: string;
+            /** Choices */
+            choices: components["schemas"]["OrgChoiceItem"][];
+        };
         /** OrgView */
         OrgView: {
             /** Id */
             id: string;
             /** Name */
             name: string;
+            /** Slug */
+            slug: string;
             /** Seats */
             seats: number;
             /** Seats Used */
@@ -2422,17 +2480,22 @@ export interface components {
         };
         /**
          * ResetRequestRequest
-         * @description Ask for a reset link. The second and last route where a caller names an org.
+         * @description Ask for a reset link. Email only, exactly as at login.
          *
-         *     Necessarily, and for login's reason: there is no credential yet to read one
-         *     off, and ``users.email`` is unique per org rather than globally. Naming the
-         *     org grants nothing here either — the answer is the same 202 whether the org
-         *     exists or not, and the thing that arrives is a mail to an address the caller
-         *     has to already control.
+         *     Since login went email-only, requiring an org here would make the reset
+         *     form the last place a locked-out person must produce an identifier they
+         *     were never asked to remember. Every account the address holds gets its
+         *     own link. The org stays optional for the
+         *     same two callers login keeps it for, and it grants nothing either way —
+         *     the answer is the same 202 whether anything matched, and the thing that
+         *     arrives is a mail to an address the caller has to already control.
          */
         ResetRequestRequest: {
-            /** Org Id */
-            org_id: string;
+            /**
+             * Org Id
+             * @description Optional. The organisation's slug or its id, to scope the reset to one account when the address holds several.
+             */
+            org_id?: string | null;
             /** Email */
             email: string;
         };
@@ -3424,12 +3487,21 @@ export interface operations {
                     "application/json": components["schemas"]["SessionView"];
                 };
             };
-            /** @description The organization, the address or the password was wrong. Which one is not disclosed. */
+            /** @description The address or the password was wrong — or the organisation, when one was named. Which one is not disclosed. */
             401: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description The password verified, and it opens more than one organisation. Sign in again with org_id set to one of the choices. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrgChoicesView"];
+                };
             };
             /** @description Validation Error */
             422: {
