@@ -1,6 +1,6 @@
 import { Section, Eyebrow, Container } from "@/components/container";
 import { Button } from "@/components/button";
-import { HeroOpsPanel } from "@/components/hero-ops-panel";
+import { MessageHero } from "@/components/hero/message-hero";
 import { TerminalPanel } from "@/components/terminal-panel";
 import { WindowChrome } from "@/components/window-chrome";
 import { Reveal } from "@/components/reveal";
@@ -63,70 +63,8 @@ export default function Home() {
       <section className="bg-hero-deep relative isolate -mt-14 overflow-hidden pt-14 sm:-mt-16 sm:pt-16">
         <div aria-hidden className="bg-grid-dark absolute inset-0 -z-10" />
 
-        <Container className="pt-14 pb-14 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-20">
-          <div className="mx-auto max-w-[840px] text-center">
-            <p className="kicker kicker-dark flex items-center justify-center gap-3">
-              <span
-                aria-hidden
-                className="inline-block h-px w-6 bg-white/30 sm:w-8"
-              />
-              Healthcare integration · Interface assurance
-              <span
-                aria-hidden
-                className="inline-block h-px w-6 bg-white/30 sm:w-8"
-              />
-            </p>
-
-            <h1 className="mt-6 text-[clamp(2.5rem,6.5vw,4.5rem)] leading-[1.02] font-medium tracking-[-0.028em] text-balance text-white">
-              The interface engine{" "}
-              <span className="font-normal text-white/50">
-                that proves it.
-              </span>
-            </h1>
-
-            <p className="mx-auto mt-6 max-w-[52ch] text-base leading-[1.65] text-pretty text-white/75 sm:text-lg">
-              Ivren routes clinical messages like any interface engine —
-              and unlike any of them, shows you what it carried, what
-              changed, and what a change would break, before you ship it.
-            </p>
-
-            <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
-              <Button
-                href="/download"
-                variant="onDark"
-                className="w-full sm:w-auto"
-              >
-                Download Ivren
-              </Button>
-              <Button
-                href="/docs"
-                variant="onDarkSecondary"
-                className="w-full sm:w-auto"
-              >
-                Explore the docs
-              </Button>
-            </div>
-          </div>
-
-          <div className="relative mx-auto mt-14 max-w-5xl sm:mt-16">
-            {/* horizon light rising behind the console */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-4 -top-20 h-40 bg-[radial-gradient(52%_100%_at_50%_100%,rgb(124_196_245/0.3),rgb(124_196_245/0.1)_60%,rgb(124_196_245/0)_100%)] blur-md"
-            />
-            <Reveal>
-              <HeroOpsPanel />
-            </Reveal>
-
-            <div className="kicker mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 font-tabular">
-              <span className="text-white/60">
-                HL7 v2 · FHIR R4 · DICOM · X12 · NCPDP
-              </span>
-              <span className="text-white/40">
-                Runs offline · No telemetry · Never sends patient data
-              </span>
-            </div>
-          </div>
+        <Container className="pt-12 pb-14 sm:pt-14 sm:pb-16 lg:pt-14 lg:pb-20">
+          <MessageHero />
         </Container>
       </section>
 
