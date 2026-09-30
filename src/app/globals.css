@@ -116,6 +116,49 @@
   }
 }
 
+/* Message hero: a reader head sweeping across one HL7 segment. */
+@keyframes hero-sweep {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400%);
+    opacity: 0;
+  }
+}
+
+/* Message hero: one delivery arriving at its destination. */
+@keyframes hero-tick {
+  from {
+    transform: translate(-2px, -50%);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  to {
+    transform: translate(22px, -50%);
+    opacity: 0;
+  }
+}
+
+/* Message hero: a destination replaying yesterday's traffic. */
+@keyframes hero-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
 /* Packets only exist where offset-path is supported; otherwise hidden. */
 .packet {
   display: none;
